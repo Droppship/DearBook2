@@ -1,0 +1,507 @@
+{% assign product = product %}
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign featured_image = current_variant.featured_image | default: product.featured_image %}
+
+<style>
+  :root {
+    --dsb-blue: #1a4aad;
+    --dsb-blue-dark: #0e2f72;
+    --dsb-blue-mid: #2558c8;
+    --dsb-blue-light: #e8effe;
+    --dsb-gold: #c9a84c;
+    --dsb-off-white: #f7f8fc;
+    --dsb-muted: #6b7280;
+    --dsb-radius: 12px;
+    --dsb-max: 1200px;
+  }
+
+  /* ── Hero ── */
+  .dsb-page { font-family: system-ui, -apple-system, sans-serif; color: #1a1a2e; }
+
+  .dsb-breadcrumb {
+    max-width: var(--dsb-max); margin: 0 auto; padding: 1rem 2rem;
+    display: flex; align-items: center; gap: .5rem;
+    font-size: .82rem; color: var(--dsb-muted);
+  }
+  .dsb-breadcrumb a { color: var(--dsb-muted); text-decoration: none; }
+  .dsb-breadcrumb a:hover { color: var(--dsb-blue); }
+  .dsb-breadcrumb span:last-child { color: var(--dsb-blue); font-weight: 500; }
+
+  .dsb-hero {
+    max-width: var(--dsb-max); margin: 0 auto; padding: 1.5rem 2rem 4rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;
+  }
+  @media(max-width:768px){ .dsb-hero { grid-template-columns:1fr; gap:2rem; padding:1rem; } }
+
+  /* Gallery */
+  .dsb-gallery { display:flex; flex-direction:column; gap:1rem; }
+  .dsb-gallery-main {
+    position:relative; background:var(--dsb-blue-light);
+    border-radius:var(--dsb-radius); overflow:hidden;
+    box-shadow:0 4px 24px rgba(26,74,173,.15);
+  }
+  .dsb-gallery-main img { width:100%; display:block; }
+  .dsb-badge {
+    position:absolute; top:1rem; left:1rem;
+    background:rgba(255,255,255,.92); color:var(--dsb-blue);
+    font-size:.72rem; font-weight:700; letter-spacing:.08em;
+    text-transform:uppercase; padding:.3rem .75rem; border-radius:999px;
+    font-style:italic;
+  }
+  .dsb-thumbs { display:flex; gap:.5rem; flex-wrap:wrap; }
+  .dsb-thumb {
+    width:72px; border:2px solid transparent; border-radius:8px;
+    overflow:hidden; cursor:pointer; padding:0; background:none;
+    transition:border-color .2s;
+  }
+  .dsb-thumb:hover, .dsb-thumb.active { border-color:var(--dsb-blue); }
+  .dsb-thumb img { width:100%; display:block; }
+
+  /* Info */
+  .dsb-eyebrow {
+    font-size:.78rem; font-weight:700; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--dsb-blue); margin:0 0 .5rem; font-style:italic;
+  }
+  .dsb-title {
+    font-size:clamp(2.2rem,3.5vw,3rem); line-height:1.1; font-weight:900;
+    color:var(--dsb-blue-dark); margin:0 0 .6rem; font-style:italic;
+  }
+  .dsb-title .normal { font-style:normal; font-weight:700; font-size:.68em; }
+  .dsb-subtitle { font-size:.95rem; color:var(--dsb-muted); margin:0 0 1.2rem; font-style:italic; }
+
+  .dsb-stars { display:flex; align-items:center; gap:.5rem; margin-bottom:1.2rem; color:var(--dsb-gold); font-size:1.1rem; }
+  .dsb-stars span { font-size:.85rem; color:var(--dsb-muted); font-weight:500; }
+
+  .dsb-price-row { display:flex; align-items:center; gap:.75rem; margin-bottom:1.5rem; }
+  .dsb-price { font-size:1.9rem; font-weight:800; color:var(--dsb-blue-dark); }
+  .dsb-compare { font-size:1.1rem; color:var(--dsb-muted); text-decoration:line-through; }
+  .dsb-tag {
+    background:var(--dsb-blue); color:#fff; font-size:.72rem; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; padding:.25rem .6rem; border-radius:4px;
+  }
+
+  /* Variant selector */
+  .dsb-option { margin-bottom:1rem; }
+  .dsb-option-label { font-size:.82rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--dsb-muted); margin-bottom:.4rem; }
+  .dsb-option-values { display:flex; gap:.5rem; flex-wrap:wrap; }
+  .dsb-swatch {
+    padding:.45rem 1.1rem; border:2px solid #d1d5db; border-radius:6px;
+    font-size:.88rem; font-weight:500; text-decoration:none; color:#1a1a2e;
+    transition:border-color .2s, background .2s; cursor:pointer; background:#fff;
+  }
+  .dsb-swatch:hover { border-color:var(--dsb-blue); }
+  .dsb-swatch.active { border-color:var(--dsb-blue); background:var(--dsb-blue); color:#fff; }
+  .dsb-swatch[disabled] { opacity:.4; pointer-events:none; }
+
+  /* Qty */
+  .dsb-qty-row { display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; }
+  .dsb-qty { display:flex; align-items:center; border:2px solid #d1d5db; border-radius:8px; overflow:hidden; }
+  .dsb-qty button { width:38px; height:38px; background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--dsb-blue-dark); transition:background .15s; }
+  .dsb-qty button:hover { background:var(--dsb-blue-light); }
+  .dsb-qty-num { min-width:38px; text-align:center; font-weight:700; font-size:1rem; }
+
+  /* Buttons */
+  .dsb-atc {
+    display:block; width:100%; padding:1.1rem 2rem;
+    background:var(--dsb-blue); color:#fff; border:none;
+    border-radius:var(--dsb-radius); font-size:1.1rem; font-weight:700;
+    letter-spacing:.03em; cursor:pointer; transition:background .2s, transform .15s;
+    text-align:center; margin-bottom:.75rem;
+    box-shadow:0 4px 16px rgba(26,74,173,.3);
+  }
+  .dsb-atc:hover { background:var(--dsb-blue-dark); transform:translateY(-1px); }
+  .dsb-atc:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+
+  .dsb-trust { display:flex; gap:.75rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+  .dsb-trust span {
+    background:var(--dsb-off-white); color:var(--dsb-muted); font-size:.78rem;
+    font-weight:600; padding:.35rem .75rem; border-radius:999px; border:1px solid #e5e7eb;
+  }
+
+  .dsb-checklist { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.5rem; }
+  .dsb-checklist li { font-size:.88rem; color:var(--dsb-muted); }
+
+  /* ── Features ── */
+  .dsb-features { background:var(--dsb-blue-dark); color:#fff; padding:5rem 2rem; text-align:center; }
+  .dsb-features h2 { font-size:2rem; font-weight:800; margin:0 0 2.5rem; }
+  .dsb-features-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:1.5rem; max-width:var(--dsb-max); margin:0 auto;
+  }
+  .dsb-feat-card {
+    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12);
+    border-radius:var(--dsb-radius); padding:2rem 1.5rem; transition:background .2s;
+  }
+  .dsb-feat-card:hover { background:rgba(255,255,255,.13); }
+  .dsb-feat-icon { font-size:2.2rem; display:block; margin-bottom:.75rem; }
+  .dsb-feat-card h3 { font-size:1.05rem; font-weight:700; margin:0 0 .5rem; }
+  .dsb-feat-card p { font-size:.88rem; color:rgba(255,255,255,.72); margin:0; line-height:1.6; }
+
+  /* ── Chapters ── */
+  .dsb-inside { display:grid; grid-template-columns:1fr 360px; gap:4rem; align-items:center; max-width:var(--dsb-max); margin:0 auto; padding:5rem 2rem; }
+  @media(max-width:900px){ .dsb-inside { grid-template-columns:1fr; } .dsb-book-visual { display:none; } }
+  .dsb-inside h2 { font-size:2rem; font-weight:800; color:var(--dsb-blue-dark); margin:0 0 1rem; }
+  .dsb-inside > div > p { font-size:1rem; color:var(--dsb-muted); line-height:1.7; margin:0 0 2rem; }
+  .dsb-chapters { list-style:none; padding:0; margin:0; counter-reset:chapter; display:flex; flex-direction:column; gap:.6rem; }
+  .dsb-chapters li { counter-increment:chapter; display:flex; align-items:center; gap:1rem; font-size:.92rem; font-weight:500; }
+  .dsb-chapters li::before {
+    content:counter(chapter,decimal-leading-zero); font-size:.72rem; font-weight:800;
+    color:var(--dsb-blue); background:var(--dsb-blue-light);
+    width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+
+  /* Book spine */
+  .dsb-book-visual { display:flex; justify-content:center; }
+  .dsb-spine {
+    width:210px; aspect-ratio:2/3;
+    background:linear-gradient(160deg, var(--dsb-blue-mid) 0%, var(--dsb-blue-dark) 100%);
+    border-radius:4px 12px 12px 4px;
+    box-shadow:-6px 0 0 #0a1e52, 0 20px 60px rgba(26,74,173,.35);
+    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+    padding:2rem 1.5rem; color:#fff; text-align:center;
+  }
+  .dsb-spine .s-top { font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; opacity:.7; font-style:italic; }
+  .dsb-spine .s-mid { font-size:1.35rem; font-weight:900; line-height:1.2; font-style:italic; }
+  .dsb-spine .s-bot { font-size:.6rem; opacity:.6; text-transform:uppercase; letter-spacing:.08em; }
+
+  /* ── Reviews ── */
+  .dsb-reviews { background:var(--dsb-off-white); padding:5rem 2rem; text-align:center; }
+  .dsb-reviews h2 { font-size:2rem; font-weight:800; color:var(--dsb-blue-dark); margin:0 0 2.5rem; }
+  .dsb-reviews-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; max-width:var(--dsb-max); margin:0 auto; }
+  .dsb-review { background:#fff; border-radius:var(--dsb-radius); padding:2rem; box-shadow:0 4px 24px rgba(26,74,173,.08); text-align:left; }
+  .dsb-review-stars { color:var(--dsb-gold); font-size:1.1rem; margin-bottom:.75rem; }
+  .dsb-review p { font-size:.95rem; line-height:1.7; margin:0 0 1rem; }
+  .dsb-review cite { font-size:.82rem; font-weight:700; color:var(--dsb-muted); font-style:normal; }
+
+  /* ── Gift banner ── */
+  .dsb-gift {
+    background:linear-gradient(135deg, var(--dsb-blue) 0%, var(--dsb-blue-dark) 100%);
+    padding:5rem 2rem; text-align:center; color:#fff;
+  }
+  .dsb-gift-inner { max-width:600px; margin:0 auto; }
+  .dsb-gift h2 { font-size:2.2rem; font-weight:800; margin:0 0 .75rem; }
+  .dsb-gift p { font-size:1rem; opacity:.8; margin:0 0 2rem; }
+  .dsb-gift .dsb-atc { background:#fff; color:var(--dsb-blue); max-width:380px; margin:0 auto; box-shadow:0 4px 16px rgba(0,0,0,.2); }
+  .dsb-gift .dsb-atc:hover { background:var(--dsb-off-white); }
+</style>
+
+<div class="dsb-page">
+
+  {%- comment -%} ── Breadcrumb ── {%- endcomment -%}
+  <nav class="dsb-breadcrumb">
+    <a href="{{ routes.root_url }}">Home</a>
+    <span>/</span>
+    <a href="{{ routes.collections_url }}">Books</a>
+    <span>/</span>
+    <span>{{ product.title }}</span>
+  </nav>
+
+  {%- comment -%} ── Hero ── {%- endcomment -%}
+  <section class="dsb-hero">
+
+    {%- comment -%} Gallery {%- endcomment -%}
+    <div class="dsb-gallery">
+      <div class="dsb-gallery-main" id="dsb-main-img-wrap">
+        {%- if featured_image -%}
+          <img
+            id="dsb-main-img"
+            src="{{ featured_image | image_url: width: 800 }}"
+            alt="{{ featured_image.alt | escape }}"
+            width="{{ featured_image.width }}"
+            height="{{ featured_image.height }}"
+            loading="eager"
+          >
+        {%- else -%}
+          <div style="aspect-ratio:2/3;background:linear-gradient(135deg,#1a4aad,#0e2f72);display:flex;align-items:center;justify-content:center;font-size:5rem;">📘</div>
+        {%- endif -%}
+        <span class="dsb-badge">Family Heirloom Journal</span>
+      </div>
+
+      {%- if product.images.size > 1 -%}
+        <div class="dsb-thumbs">
+          {%- for image in product.images -%}
+            <button
+              class="dsb-thumb{% if forloop.first %} active{% endif %}"
+              onclick="dsbSetImg('{{ image | image_url: width: 800 }}', this)"
+              aria-label="{{ image.alt | default: product.title | escape }}"
+            >
+              <img src="{{ image | image_url: width: 160 }}" alt="{{ image.alt | escape }}" loading="lazy">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Info panel {%- endcomment -%}
+    <div class="dsb-info">
+      <p class="dsb-eyebrow">Family Heirloom Journal</p>
+      <h1 class="dsb-title">
+        Dad,<br>
+        <span class="normal">I Want to Hear</span><br>
+        <span class="normal">Your Story</span>
+      </h1>
+      <p class="dsb-subtitle">A Father's Guided Journal to Share His Life &amp; Legacy</p>
+
+      <div class="dsb-stars">
+        ★★★★★ <span>4.9 &nbsp;·&nbsp; 2,400+ reviews</span>
+      </div>
+
+      <div class="dsb-price-row">
+        <span class="dsb-price" id="dsb-price">
+          {{ current_variant.price | money }}
+        </span>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <s class="dsb-compare" id="dsb-compare">{{ current_variant.compare_at_price | money }}</s>
+        {%- else -%}
+          <s class="dsb-compare" id="dsb-compare" style="display:none"></s>
+        {%- endif -%}
+        <span class="dsb-tag">Best Seller</span>
+      </div>
+
+      <form action="{{ routes.cart_add_url }}" method="post" id="dsb-form">
+        <input type="hidden" name="id" id="dsb-variant-id" value="{{ current_variant.id }}">
+
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="dsb-option">
+              <p class="dsb-option-label">{{ option.name }}</p>
+              <div class="dsb-option-values">
+                {%- for value in option.values -%}
+                  {%- assign variant_for_value = product.variants | where: "option1", value | first -%}
+                  <button
+                    type="button"
+                    class="dsb-swatch{% if option.selected_value == value %} active{% endif %}"
+                    data-option-index="{{ option.position }}"
+                    data-value="{{ value | escape }}"
+                    onclick="dsbSelectOption(this)"
+                    {% unless variant_for_value.available %}disabled{% endunless %}
+                  >{{ value }}</button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <div class="dsb-qty-row">
+          <span class="dsb-option-label">Quantity</span>
+          <div class="dsb-qty">
+            <button type="button" onclick="dsbQty(-1)">−</button>
+            <span class="dsb-qty-num" id="dsb-qty">1</span>
+            <button type="button" onclick="dsbQty(1)">+</button>
+          </div>
+          <input type="hidden" name="quantity" id="dsb-qty-input" value="1">
+        </div>
+
+        <button
+          type="submit"
+          class="dsb-atc"
+          id="dsb-atc-btn"
+          {% unless current_variant.available %}disabled{% endunless %}
+        >
+          {%- if current_variant.available -%}
+            🛒&nbsp; Add to Cart
+          {%- else -%}
+            Sold Out
+          {%- endif -%}
+        </button>
+      </form>
+
+      <div class="dsb-trust">
+        <span>🔒 Secure checkout</span>
+        <span>📦 Free shipping $50+</span>
+        <span>↩️ 30-day returns</span>
+      </div>
+
+      <ul class="dsb-checklist">
+        <li>✔ 200+ guided prompts across 10 life chapters</li>
+        <li>✔ Premium hardcover · lay-flat binding</li>
+        <li>✔ Acid-free, archival-quality pages</li>
+        <li>✔ Gift-ready packaging included</li>
+      </ul>
+    </div>
+  </section>
+
+  {%- comment -%} ── Feature cards ── {%- endcomment -%}
+  <section class="dsb-features">
+    <h2>Why Families Love This Journal</h2>
+    <div class="dsb-features-grid">
+      <div class="dsb-feat-card">
+        <span class="dsb-feat-icon">📖</span>
+        <h3>200+ Guided Prompts</h3>
+        <p>Thoughtful questions that spark memories — from childhood adventures to life lessons.</p>
+      </div>
+      <div class="dsb-feat-card">
+        <span class="dsb-feat-icon">🏛️</span>
+        <h3>Family Heirloom Quality</h3>
+        <p>Premium hardcover binding designed to be passed down for generations.</p>
+      </div>
+      <div class="dsb-feat-card">
+        <span class="dsb-feat-icon">🎁</span>
+        <h3>Perfect Gift</h3>
+        <p>Father's Day, birthdays, Christmas — the gift that keeps giving for a lifetime.</p>
+      </div>
+      <div class="dsb-feat-card">
+        <span class="dsb-feat-icon">✍️</span>
+        <h3>Write at Your Own Pace</h3>
+        <p>No pressure. Fill one page a week or binge on a rainy Sunday.</p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ── Chapters ── {%- endcomment -%}
+  <section class="dsb-inside">
+    <div>
+      <h2>Ten Chapters. A Whole Lifetime.</h2>
+      <p>Carefully structured prompts guide Dad through every era of his life — from his earliest memories to the wisdom he wants to pass on to you.</p>
+      <ol class="dsb-chapters">
+        <li>Early Childhood &amp; Family Roots</li>
+        <li>School Days &amp; Friendships</li>
+        <li>First Jobs &amp; Big Dreams</li>
+        <li>Love &amp; Marriage</li>
+        <li>Becoming a Parent</li>
+        <li>Career &amp; Life Lessons</li>
+        <li>Adventures &amp; Travel</li>
+        <li>Values &amp; Beliefs</li>
+        <li>Favourite Memories with You</li>
+        <li>Letters to the Future</li>
+      </ol>
+    </div>
+    <div class="dsb-book-visual">
+      <div class="dsb-spine">
+        <span class="s-top">Family Heirloom Journal</span>
+        <strong class="s-mid">Dad,<br>I Want to Hear<br>Your Story</strong>
+        <span class="s-bot">A Father's Guided Journal</span>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ── Reviews ── {%- endcomment -%}
+  <section class="dsb-reviews">
+    <h2>What Families Are Saying</h2>
+    <div class="dsb-reviews-grid">
+      <div class="dsb-review">
+        <div class="dsb-review-stars">★★★★★</div>
+        <p>"I gave this to my dad for Father's Day and he cried. Now we have a piece of him we'll treasure forever."</p>
+        <cite>— Sarah M.</cite>
+      </div>
+      <div class="dsb-review">
+        <div class="dsb-review-stars">★★★★★</div>
+        <p>"As a dad myself, filling this out was one of the most meaningful things I've done for my kids."</p>
+        <cite>— James T.</cite>
+      </div>
+      <div class="dsb-review">
+        <div class="dsb-review-stars">★★★★★</div>
+        <p>"Beautiful quality. My father finished every single page. It's his whole life in one book."</p>
+        <cite>— Linda K.</cite>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ── Gift CTA ── {%- endcomment -%}
+  <section class="dsb-gift">
+    <div class="dsb-gift-inner">
+      <h2>🎁 The Perfect Gift for Dad</h2>
+      <p>Father's Day &nbsp;·&nbsp; Birthdays &nbsp;·&nbsp; Christmas &nbsp;·&nbsp; Just Because</p>
+      <form action="{{ routes.cart_add_url }}" method="post">
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit" class="dsb-atc">Get the Book — Gift It Today</button>
+      </form>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  /* ── Image gallery ── */
+  function dsbSetImg(src, btn) {
+    document.getElementById('dsb-main-img').src = src;
+    document.querySelectorAll('.dsb-thumb').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  /* ── Qty stepper ── */
+  function dsbQty(delta) {
+    var el = document.getElementById('dsb-qty');
+    var inp = document.getElementById('dsb-qty-input');
+    var n = Math.max(1, parseInt(el.textContent) + delta);
+    el.textContent = n;
+    inp.value = n;
+  }
+
+  /* ── Variant selector ── */
+  var dsbVariants = {{ product.variants | json }};
+
+  function dsbSelectOption(btn) {
+    var optionIndex = parseInt(btn.dataset.optionIndex) - 1;
+    var value = btn.dataset.value;
+
+    // Highlight active swatch in this option group
+    btn.closest('.dsb-option-values').querySelectorAll('.dsb-swatch').forEach(function(s) {
+      s.classList.remove('active');
+    });
+    btn.classList.add('active');
+
+    // Build selected options array
+    var selected = [];
+    document.querySelectorAll('.dsb-option').forEach(function(optEl) {
+      var active = optEl.querySelector('.dsb-swatch.active');
+      selected.push(active ? active.dataset.value : '');
+    });
+
+    // Find matching variant
+    var match = dsbVariants.find(function(v) {
+      return v.options.every(function(o, i) { return selected[i] === undefined || o === selected[i]; });
+    });
+
+    if (match) {
+      document.getElementById('dsb-variant-id').value = match.id;
+
+      // Update price
+      var priceEl = document.getElementById('dsb-price');
+      priceEl.textContent = formatMoney(match.price);
+
+      // Update compare price
+      var compareEl = document.getElementById('dsb-compare');
+      if (match.compare_at_price > match.price) {
+        compareEl.textContent = formatMoney(match.compare_at_price);
+        compareEl.style.display = '';
+      } else {
+        compareEl.style.display = 'none';
+      }
+
+      // Update button
+      var btn2 = document.getElementById('dsb-atc-btn');
+      if (match.available) {
+        btn2.disabled = false;
+        btn2.textContent = '🛒  Add to Cart';
+      } else {
+        btn2.disabled = true;
+        btn2.textContent = 'Sold Out';
+      }
+
+      // Update image if variant has one
+      if (match.featured_image) {
+        document.getElementById('dsb-main-img').src = match.featured_image.src;
+      }
+    }
+  }
+
+  function formatMoney(cents) {
+    return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Dad Stories Book",
+  "tag": "section",
+  "class": "section-dad-stories-book",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Dad Stories Book"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "product-dad-stories-book",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}
