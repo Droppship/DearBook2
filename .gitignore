@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.cache/
+build/
+.env
+.shopify/
+*.local
