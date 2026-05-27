@@ -4,41 +4,61 @@ import {Suspense} from 'react';
 export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   const {shop, menu} = header;
   return (
-    <header className="header">
-      <NavLink prefetch="intent" to="/" end>
-        <strong>{shop.name}</strong>
-      </NavLink>
-      <HeaderMenu menu={menu} viewport="desktop" primaryDomainUrl={shop.primaryDomain.url} publicStoreDomain={publicStoreDomain} />
-      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
-    </header>
+    <div className="header-sticky-wrap">
+      <div className="announcement-bar">
+        🎁 <strong>Fête des Pères :</strong> Livraison Gratuite sur Toutes les
+        Commandes &nbsp;·&nbsp; Commandez Avant le 15 Juin
+      </div>
+      <header className="header">
+        <NavLink prefetch="intent" to="/" className="header-logo" end>
+          <span className="header-logo-icon">📖</span>
+          <span className="header-logo-text">DearBook</span>
+        </NavLink>
+
+        <HeaderMenu
+          menu={menu}
+          viewport="desktop"
+          primaryDomainUrl={shop.primaryDomain.url}
+          publicStoreDomain={publicStoreDomain}
+        />
+
+        <div className="header-ctas">
+          <Suspense fallback={<CartBadge count={null} />}>
+            <Await resolve={cart}>
+              {(cartData) => <CartBadge count={cartData?.totalQuantity ?? 0} />}
+            </Await>
+          </Suspense>
+        </div>
+      </header>
+    </div>
   );
 }
 
 function HeaderMenu({menu, primaryDomainUrl, viewport, publicStoreDomain}) {
-  const className = `header-menu-${viewport}`;
+  const items = menu?.items ?? FALLBACK_HEADER_MENU.items;
 
-  function closeAside(event) {
-    if (viewport === 'mobile') {
-      event.preventDefault();
-      window.location.href = event.currentTarget.href;
+  function resolveUrl(rawUrl) {
+    if (
+      rawUrl?.includes('myshopify.com') ||
+      rawUrl?.includes(publicStoreDomain) ||
+      rawUrl?.includes(primaryDomainUrl)
+    ) {
+      return new URL(rawUrl).pathname;
     }
+    return rawUrl;
   }
 
   return (
-    <nav className={className} role="navigation">
-      {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
-        const url =
-          item.url?.includes('myshopify.com') ||
-          item.url?.includes(publicStoreDomain) ||
-          item.url?.includes(primaryDomainUrl)
-            ? new URL(item.url).pathname
-            : item.url;
+    <nav className={`header-menu-${viewport}`} role="navigation">
+      {items.map((item) => {
+        const url = resolveUrl(item.url);
         return (
           <NavLink
-            className="header-menu-item"
+            className={({isActive}) =>
+              `header-menu-item${isActive ? ' active' : ''}`
+            }
             end
             key={item.id}
-            onClick={closeAside}
             prefetch="intent"
             to={url}
           >
@@ -50,27 +70,14 @@ function HeaderMenu({menu, primaryDomainUrl, viewport, publicStoreDomain}) {
   );
 }
 
-function HeaderCtas({isLoggedIn, cart}) {
-  return (
-    <nav className="header-ctas" role="navigation">
-      <Suspense fallback="Sign in">
-        <Await resolve={isLoggedIn} errorElement="Sign in">
-          {(loggedIn) => <NavLink prefetch="intent" to="/account">{loggedIn ? 'Account' : 'Sign in'}</NavLink>}
-        </Await>
-      </Suspense>
-      <Suspense fallback={<CartBadge count={null} />}>
-        <Await resolve={cart}>
-          {(cart) => <CartBadge count={cart?.totalQuantity ?? 0} />}
-        </Await>
-      </Suspense>
-    </nav>
-  );
-}
-
 function CartBadge({count}) {
   return (
-    <NavLink prefetch="intent" to="/cart">
-      Cart {count === null ? <span>&nbsp;</span> : <span>{count}</span>}
+    <NavLink prefetch="intent" to="/cart" className="cart-btn">
+      🛒
+      {count !== null && count > 0 && (
+        <span className="cart-count">{count}</span>
+      )}
+      Panier
     </NavLink>
   );
 }
@@ -79,39 +86,39 @@ const FALLBACK_HEADER_MENU = {
   id: 'gid://shopify/Menu/199655587896',
   items: [
     {
-      id: 'gid://shopify/MenuItem/461609500728',
+      id: '1',
       resourceId: null,
       tags: [],
-      title: 'Collections',
+      title: 'Accueil',
       type: 'HTTP',
-      url: '/collections',
+      url: '/',
       items: [],
     },
     {
-      id: 'gid://shopify/MenuItem/461609533496',
+      id: '2',
       resourceId: null,
       tags: [],
-      title: 'Blog',
+      title: 'Notre Livre',
       type: 'HTTP',
-      url: '/blogs/journal',
+      url: '/collections/all',
       items: [],
     },
     {
-      id: 'gid://shopify/MenuItem/461609566264',
+      id: '3',
       resourceId: null,
       tags: [],
-      title: 'Policies',
+      title: 'Témoignages',
       type: 'HTTP',
-      url: '/policies',
+      url: '/#testimonials',
       items: [],
     },
     {
-      id: 'gid://shopify/MenuItem/461609599032',
+      id: '4',
       resourceId: null,
       tags: [],
-      title: 'Products',
+      title: 'FAQ',
       type: 'HTTP',
-      url: '/products',
+      url: '/#faq',
       items: [],
     },
   ],
