@@ -3,7 +3,7 @@ import {json} from '@shopify/remix-oxygen';
 import {Image, Money, Pagination, getPaginationVariables} from '@shopify/hydrogen';
 
 export const meta = ({data}) => {
-  return [{title: `DearBook2 | ${data?.collection?.title ?? 'Collection'}`}];
+  return [{title: `DearBook | ${data?.collection?.title ?? 'Collection'}`}];
 };
 
 export async function loader({params, request, context}) {
@@ -33,7 +33,7 @@ export default function Collection() {
       <Pagination connection={collection.products}>
         {({nodes, PreviousLink, NextLink}) => (
           <>
-            <PreviousLink>Previous</PreviousLink>
+            <div className="pagination-links"><PreviousLink>← Précédent</PreviousLink></div>
             <div className="products-grid">
               {nodes.map((product) => (
                 <Link
@@ -55,7 +55,7 @@ export default function Collection() {
                 </Link>
               ))}
             </div>
-            <NextLink>Next</NextLink>
+            <div className="pagination-links"><NextLink>Suivant →</NextLink></div>
           </>
         )}
       </Pagination>
