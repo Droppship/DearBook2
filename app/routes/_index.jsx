@@ -9,8 +9,12 @@ export const meta = () => {
     {
       name: 'description',
       content:
-        "Le cadeau parfait pour votre père — un journal guidé avec plus de 200 questions pour capturer ses précieux souvenirs à jamais. Livraison gratuite.",
+        "Le cadeau parfait pour votre père — un journal guidé avec plus de 200 questions pour capturer ses précieux souvenirs à jamais. Livraison gratuite sur dearbook.ca",
     },
+    {property: 'og:title', content: 'DearBook | Papa, Raconte-Moi Ton Histoire'},
+    {property: 'og:description', content: "Le cadeau parfait pour Papa — un journal guidé avec 200+ questions pour capturer ses souvenirs pour toujours."},
+    {property: 'og:url', content: 'https://dearbook.ca'},
+    {name: 'twitter:card', content: 'summary_large_image'},
   ];
 };
 

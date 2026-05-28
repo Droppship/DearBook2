@@ -76,7 +76,7 @@ export function Footer({menu, shop}) {
         {/* Bottom Bar */}
         <div className="footer-bottom">
           <p className="footer-copyright">
-            © {new Date().getFullYear()} DearBook. Tous droits réservés.
+            © {new Date().getFullYear()} DearBook · dearbook.ca · Tous droits réservés.
           </p>
           <div className="footer-payments">
             {['VISA', 'MC', 'AMEX', 'PayPal', 'Apple Pay'].map((p) => (
