@@ -2,8 +2,14 @@ import {defineConfig} from 'vite';
 import {hydrogen} from '@shopify/hydrogen/vite';
 import {oxygen} from '@shopify/mini-oxygen/vite';
 import {vitePlugin as remix} from '@remix-run/dev';
+import {fileURLToPath} from 'node:url';
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '~': fileURLToPath(new URL('./app', import.meta.url)),
+    },
+  },
   plugins: [
     oxygen(),
     hydrogen(),
