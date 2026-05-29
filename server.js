@@ -1,4 +1,14 @@
-import {createRequestHandler, getStorefrontHeaders} from '@shopify/remix-oxygen';
+import {
+  createRequestHandler,
+  getStorefrontHeaders,
+  createStorefrontClient,
+} from '@shopify/remix-oxygen';
+import {
+  createCartHandler,
+  cartGetIdDefault,
+  cartSetIdDefault,
+} from '@shopify/hydrogen';
+import * as remixBuild from 'virtual:remix/server-build';
 import {AppSession} from '~/lib/session';
 import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
 
@@ -22,6 +32,11 @@ export default {
         storefrontHeaders: getStorefrontHeaders(request),
       });
 
+      const customerAccount = {
+        isLoggedIn: async () => false,
+        logout: async () => new Response(null, {status: 200}),
+      };
+
       const cart = createCartHandler({
         storefront,
         getCartId: cartGetIdDefault(request.headers),
@@ -35,6 +50,7 @@ export default {
         getLoadContext: () => ({
           session,
           storefront,
+          customerAccount,
           cart,
           env,
           waitUntil,
@@ -77,9 +93,5 @@ function getLocaleFromRequest(request) {
     country = parts[1].toUpperCase();
   }
 
-  return {
-    language,
-    country,
-    pathPrefix,
-  };
+  return {language, country, pathPrefix};
 }
