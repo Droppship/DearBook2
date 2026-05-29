@@ -1,9 +1,6 @@
+import {createRequestHandler, getStorefrontHeaders} from '@shopify/remix-oxygen';
 import {
-  createRequestHandler,
-  getStorefrontHeaders,
   createStorefrontClient,
-} from '@shopify/remix-oxygen';
-import {
   createCartHandler,
   cartGetIdDefault,
   cartSetIdDefault,
