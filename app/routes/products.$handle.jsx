@@ -33,8 +33,7 @@ export async function loader({params, context}) {
 
 export default function Product() {
   const {product} = useLoaderData();
-  const {selectedOrFirstAvailableVariant} = product;
-  const [selectedVariant, setSelectedVariant] = useState(selectedOrFirstAvailableVariant);
+  const [selectedVariant, setSelectedVariant] = useState(product.variants.nodes[0]);
   const [activeTab, setActiveTab] = useState('description');
 
   const staticReviews = [
@@ -393,25 +392,6 @@ const PRODUCT_QUERY = `#graphql
       options {
         name
         values
-      }
-      selectedOrFirstAvailableVariant(selectedOptions: []) {
-        id
-        availableForSale
-        price {
-          amount
-          currencyCode
-        }
-        compareAtPrice {
-          amount
-          currencyCode
-        }
-        image {
-          id
-          url
-          altText
-          width
-          height
-        }
       }
       variants(first: 250) {
         nodes {
