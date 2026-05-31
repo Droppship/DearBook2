@@ -419,9 +419,6 @@ function FinalCTA({featuredProduct}) {
             }}
           </Await>
         </Suspense>
-        <p className="final-cta-price">
-          Seulement <strong>29,99 €</strong> · Livraison gratuite incluse
-        </p>
       </div>
     </section>
   );
