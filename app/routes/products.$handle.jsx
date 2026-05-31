@@ -209,10 +209,6 @@ export default function Product() {
           {/* Trust Badges */}
           <div className="product-trust-badges">
             <div className="product-trust-badge">
-              <span className="product-trust-badge-icon">🚚</span>
-              <span className="product-trust-badge-text">Livraison Gratuite</span>
-            </div>
-            <div className="product-trust-badge">
               <span className="product-trust-badge-icon">🔒</span>
               <span className="product-trust-badge-text">Paiement Sécurisé</span>
             </div>
