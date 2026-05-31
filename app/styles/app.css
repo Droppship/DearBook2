@@ -346,8 +346,11 @@ body {
 
 .hero-book-img {
   position: relative;
-  max-width: 370px;
+  max-width: 420px;
   width: 100%;
+  height: auto;
+  object-fit: contain;
+  aspect-ratio: auto;
   border-radius: 12px;
   box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.3);
   transform: rotate(-3deg);
