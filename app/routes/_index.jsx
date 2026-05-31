@@ -37,7 +37,6 @@ export default function Homepage() {
       <TestimonialsSection />
       <GiftSection />
       <GuaranteeSection />
-      <FAQSection />
       <FinalCTA featuredProduct={featuredProduct} />
     </div>
   );
@@ -385,63 +384,6 @@ function GuaranteeSection() {
   );
 }
 
-/* ─── FAQ ───────────────────────────────────────────────── */
-function FAQSection() {
-  const faqs = [
-    {
-      q: 'En combien de temps vais-je recevoir ma commande?',
-      a: "La livraison standard prend entre 5 et 10 jours ouvrables. Nous expédions depuis notre entrepôt sous 24 à 48h après réception de votre commande.",
-    },
-    {
-      q: 'Le livre est-il en français?',
-      a: "Le titre est en anglais ('Dad, I Want to Hear Your Story'), mais c'est un journal universel apprécié dans le monde entier. Les questions intérieures parlent à toutes les familles, peu importe la langue.",
-    },
-    {
-      q: "Quelle est la différence avec un simple carnet?",
-      a: "Ce journal contient plus de 200 questions soigneusement rédigées pour guider la conversation et révéler des histoires que vous n'auriez jamais pensé à demander. C'est un outil conçu pour créer des souvenirs.",
-    },
-    {
-      q: 'Puis-je offrir ce journal à un grand-père?',
-      a: "Absolument! Ce journal est parfait pour tout homme de la famille — père, grand-père, beau-père ou oncle. Les questions s'adaptent à toutes les générations.",
-    },
-    {
-      q: "Comment fonctionne la garantie de remboursement?",
-      a: "Contactez notre service client dans les 30 jours suivant la réception. Nous vous guiderons pour le retour et procéderons au remboursement complet sous 5 jours ouvrables.",
-    },
-  ];
-
-  return (
-    <section className="section section-white">
-      <div className="section-inner">
-        <h2 className="section-title">Questions Fréquentes</h2>
-        <div className="section-divider" />
-        <FAQList faqs={faqs} />
-      </div>
-    </section>
-  );
-}
-
-function FAQList({faqs}) {
-  const [openIndex, setOpenIndex] = useState(null);
-  return (
-    <div className="faq-list">
-      {faqs.map((faq, i) => (
-        <div className="faq-item" key={i}>
-          <button
-            className="faq-question"
-            onClick={() => setOpenIndex(openIndex === i ? null : i)}
-          >
-            {faq.q}
-            <span className={`faq-chevron ${openIndex === i ? 'open' : ''}`}>▼</span>
-          </button>
-          <div className={`faq-answer ${openIndex === i ? 'open' : ''}`}>
-            {faq.a}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 /* ─── FINAL CTA ─────────────────────────────────────────── */
 function FinalCTA({featuredProduct}) {
