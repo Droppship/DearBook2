@@ -869,8 +869,8 @@ body {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   display: block;
-  aspect-ratio: 3/4;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
 }
 
 .product-gallery-placeholder {
