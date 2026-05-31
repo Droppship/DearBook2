@@ -161,31 +161,33 @@ export default function Product() {
 
           <div className="product-divider" />
 
-          {/* Variant Selector */}
-          <VariantSelector
-            handle={product.handle}
-            options={product.options}
-            variants={product.variants.nodes}
-          >
-            {({option}) => (
-              <div className="product-option" key={option.name}>
-                <h5>{option.name}</h5>
-                <div className="product-option-values">
-                  {option.values.map(({value, isAvailable, isActive, to}) => (
-                    <a
-                      key={option.name + value}
-                      href={to}
-                      className={`product-option-value ${isActive ? 'active' : ''} ${
-                        !isAvailable ? 'disabled' : ''
-                      }`}
-                    >
-                      {value}
-                    </a>
-                  ))}
+          {/* Variant Selector — masqué si une seule variante "Default Title" */}
+          {!(product.options.length === 1 && product.options[0].values.length === 1 && product.options[0].values[0] === 'Default Title') && (
+            <VariantSelector
+              handle={product.handle}
+              options={product.options}
+              variants={product.variants.nodes}
+            >
+              {({option}) => (
+                <div className="product-option" key={option.name}>
+                  <h5>{option.name}</h5>
+                  <div className="product-option-values">
+                    {option.values.map(({value, isAvailable, isActive, to}) => (
+                      <a
+                        key={option.name + value}
+                        href={to}
+                        className={`product-option-value ${isActive ? 'active' : ''} ${
+                          !isAvailable ? 'disabled' : ''
+                        }`}
+                      >
+                        {value}
+                      </a>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </VariantSelector>
+              )}
+            </VariantSelector>
+          )}
 
           {/* Add to Cart */}
           <CartForm
