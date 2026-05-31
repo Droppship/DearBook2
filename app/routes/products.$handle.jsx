@@ -209,16 +209,16 @@ export default function Product() {
           {/* Trust Badges */}
           <div className="product-trust-badges">
             <div className="product-trust-badge">
-              <span className="product-trust-badge-icon">😊</span>
-              <span className="product-trust-badge-text">Papa Heureux Garanti</span>
-            </div>
-            <div className="product-trust-badge">
               <span className="product-trust-badge-icon">🔒</span>
               <span className="product-trust-badge-text">Paiement Sécurisé</span>
             </div>
             <div className="product-trust-badge">
               <span className="product-trust-badge-icon">↩️</span>
               <span className="product-trust-badge-text">Retour 30 Jours</span>
+            </div>
+            <div className="product-trust-badge">
+              <span className="product-trust-badge-icon">😊</span>
+              <span className="product-trust-badge-text">Papa Heureux Garanti</span>
             </div>
           </div>
 
