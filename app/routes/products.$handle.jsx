@@ -228,7 +228,6 @@ export default function Product() {
             <li>Couverture rigide premium de haute qualité</li>
             <li>Format idéal pour écrire confortablement</li>
             <li>Parfait comme cadeau pour la Fête des Pères</li>
-            <li>Livraison soignée sous 5 à 10 jours ouvrables</li>
           </ul>
         </div>
       </div>
