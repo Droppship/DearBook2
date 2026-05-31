@@ -239,6 +239,7 @@ export default function Product() {
           {['description', 'details', 'reviews'].map((tab) => (
             <button
               key={tab}
+              type="button"
               className={`product-tab-btn ${activeTab === tab ? 'active' : ''}`}
               onClick={() => setActiveTab(tab)}
             >
