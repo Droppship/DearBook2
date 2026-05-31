@@ -5,10 +5,6 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   const {shop, menu} = header;
   return (
     <div className="header-sticky-wrap">
-      <div className="announcement-bar">
-        🎁 <strong>Fête des Pères :</strong> Livraison Gratuite sur Toutes les
-        Commandes &nbsp;·&nbsp; Commandez Avant le 15 Juin
-      </div>
       <header className="header">
         <NavLink prefetch="intent" to="/" className="header-logo" end>
           <span className="header-logo-icon">📖</span>
