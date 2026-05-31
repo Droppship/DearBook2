@@ -284,10 +284,6 @@ export default function Product() {
                   <span>Anglais (titre) — Journal universel</span>
                 </li>
                 <li>
-                  <strong>Expédition</strong>
-                  <span>Sous 24–48h, livraison en 5–10 jours ouvrables</span>
-                </li>
-                <li>
                   <strong>Emballage</strong>
                   <span>Emballage cadeau soigné inclus</span>
                 </li>
