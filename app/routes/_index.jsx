@@ -111,7 +111,6 @@ function HeroSection({featuredProduct}) {
           </div>
 
           <div className="hero-trust-badges">
-            <span className="hero-trust-badge">🚚 Livraison Gratuite</span>
             <span className="hero-trust-badge">🔒 Paiement Sécurisé</span>
             <span className="hero-trust-badge">↩️ Garantie 30 Jours</span>
           </div>
@@ -166,7 +165,6 @@ function TrustBar() {
   const items = [
     {icon: '👨‍👧', label: '50 000+', sub: 'Familles'},
     {icon: '⭐', label: '4.9/5', sub: 'Avis clients'},
-    {icon: '🚚', label: 'Livraison', sub: 'Gratuite'},
     {icon: '🔒', label: 'Paiement', sub: '100% Sécurisé'},
     {icon: '↩️', label: 'Garantie', sub: '30 Jours'},
   ];
