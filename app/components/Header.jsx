@@ -31,37 +31,26 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
 }
 
 function HeaderMenu({menu, primaryDomainUrl, viewport, publicStoreDomain}) {
-  const items = menu?.items ?? FALLBACK_HEADER_MENU.items;
-
-  function resolveUrl(rawUrl) {
-    if (
-      rawUrl?.includes('myshopify.com') ||
-      rawUrl?.includes(publicStoreDomain) ||
-      rawUrl?.includes(primaryDomainUrl)
-    ) {
-      return new URL(rawUrl).pathname;
-    }
-    return rawUrl;
-  }
+  const NAV_ITEMS = [
+    {id: '1', title: 'Accueil', url: '/'},
+    {id: '3', title: 'Témoignages', url: '/#testimonials'},
+  ];
 
   return (
     <nav className={`header-menu-${viewport}`} role="navigation">
-      {items.map((item) => {
-        const url = resolveUrl(item.url);
-        return (
-          <NavLink
-            className={({isActive}) =>
-              `header-menu-item${isActive ? ' active' : ''}`
-            }
-            end
-            key={item.id}
-            prefetch="intent"
-            to={url}
-          >
-            {item.title}
-          </NavLink>
-        );
-      })}
+      {NAV_ITEMS.map((item) => (
+        <NavLink
+          className={({isActive}) =>
+            `header-menu-item${isActive ? ' active' : ''}`
+          }
+          end
+          key={item.id}
+          prefetch="intent"
+          to={item.url}
+        >
+          {item.title}
+        </NavLink>
+      ))}
     </nav>
   );
 }
