@@ -31,26 +31,13 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
 }
 
 function HeaderMenu({menu, primaryDomainUrl, viewport, publicStoreDomain}) {
-  const NAV_ITEMS = [
-    {id: '1', title: 'Accueil', url: '/'},
-    {id: '3', title: 'Témoignages', url: '/#testimonials'},
-  ];
-
   return (
     <nav className={`header-menu-${viewport}`} role="navigation">
-      {NAV_ITEMS.map((item) => (
-        <NavLink
-          className={({isActive}) =>
-            `header-menu-item${isActive ? ' active' : ''}`
-          }
-          end
-          key={item.id}
-          prefetch="intent"
-          to={item.url}
-        >
-          {item.title}
-        </NavLink>
-      ))}
+      <NavLink className={({isActive}) => `header-menu-item${isActive ? ' active' : ''}`} end prefetch="intent" to="/">
+        Accueil
+      </NavLink>
+      <span className="header-menu-item header-menu-item-disabled">Catalogue</span>
+      <span className="header-menu-item header-menu-item-disabled">Contact</span>
     </nav>
   );
 }

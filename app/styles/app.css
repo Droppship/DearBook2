@@ -120,6 +120,15 @@ body {
   border-bottom-color: var(--gold);
 }
 
+.header-menu-item-disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+.header-menu-item-disabled:hover {
+  color: var(--text-body);
+  border-bottom-color: transparent;
+}
+
 .header-ctas {
   display: flex;
   align-items: center;
