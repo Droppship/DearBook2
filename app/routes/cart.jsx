@@ -17,17 +17,21 @@ export async function action({request, context}) {
   let addError = null;
 
   switch (action) {
-    case CartForm.ACTIONS.LinesAdd:
-      console.log('[Cart] inputs.lines:', JSON.stringify(inputs.lines));
+    case CartForm.ACTIONS.LinesAdd: {
+      const mid = inputs.lines?.[0]?.merchandiseId;
+      console.log('[Cart] merchandiseId:', mid);
       result = await cart.addLines(inputs.lines);
-      console.log('[Cart] totalQuantity:', result?.cart?.totalQuantity);
-      console.log('[Cart] errors:', JSON.stringify(result?.errors));
-      if (result?.errors?.length) {
-        addError = result.errors.map((e) => e.message).join(', ');
-      } else if (!result?.cart?.totalQuantity) {
-        addError = 'Le produit na pas pu etre ajoute (quantite 0)';
+      const errs = result?.errors || result?.userErrors;
+      console.log('[Cart] qty:', result?.cart?.totalQuantity, 'errors:', JSON.stringify(errs));
+      if (errs?.length) {
+        addError = errs.map((e) => e.message || e.code || 'unknown').join(', ');
+      } else if (!result?.cart) {
+        addError = 'Panier null - token ou permission invalide';
+      } else if (!result.cart.totalQuantity) {
+        addError = `Panier vide - mid=${mid ? mid.slice(-10) : 'MANQUANT'}`;
       }
       break;
+    }
     case CartForm.ACTIONS.LinesUpdate:
       result = await cart.updateLines(inputs.lines);
       break;
