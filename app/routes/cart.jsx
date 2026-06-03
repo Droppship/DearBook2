@@ -23,9 +23,7 @@ export async function action({request, context}) {
   const {action, inputs} = CartForm.getFormInput(formData);
 
   if (action === CartForm.ACTIONS.LinesAdd) {
-    console.log('[Cart] LinesAdd mid:', inputs.lines?.[0]?.merchandiseId);
     const result = await cart.addLines(inputs.lines);
-    console.log('[Cart] totalQuantity:', result?.cart?.totalQuantity);
 
     if (result?.cart?.id) {
       context.session.set('cartId', result.cart.id);
