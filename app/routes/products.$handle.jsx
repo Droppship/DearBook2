@@ -1,6 +1,6 @@
 import {useLoaderData, Link} from '@remix-run/react';
 import {json} from '@shopify/remix-oxygen';
-import {Image, Money, VariantSelector, CartForm} from '@shopify/hydrogen';
+import {Image, Money, VariantSelector} from '@shopify/hydrogen';
 import {useState} from 'react';
 
 export const meta = ({data}) => {
@@ -190,21 +190,25 @@ export default function Product() {
           )}
 
           {/* Add to Cart */}
-          <CartForm
-            route="/cart"
-            action={CartForm.ACTIONS.LinesAdd}
-            inputs={{lines: [{merchandiseId: selectedVariant?.id, quantity: 1}]}}
-          >
+          <form method="POST" action="/cart">
+            <input
+              type="hidden"
+              name="cartFormInput"
+              value={JSON.stringify({
+                action: 'LinesAdd',
+                inputs: {lines: [{merchandiseId: selectedVariant?.id || '', quantity: 1}]},
+              })}
+            />
             <button
               type="submit"
               className="product-add-to-cart"
-              disabled={!selectedVariant?.availableForSale}
+              disabled={!selectedVariant?.availableForSale || !selectedVariant?.id}
             >
               {selectedVariant?.availableForSale
                 ? '🛒 Ajouter au Panier'
                 : 'Rupture de stock'}
             </button>
-          </CartForm>
+          </form>
 
           {/* Trust Badges */}
           <div className="product-trust-badges">
