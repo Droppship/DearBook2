@@ -2,9 +2,14 @@ import {CartForm} from '@shopify/hydrogen';
 import {json, redirect} from '@shopify/remix-oxygen';
 import {useLoaderData} from '@remix-run/react';
 
-export async function loader({context}) {
+export async function loader({context, request}) {
+  const cookieHeader = request.headers.get('Cookie') || '';
+  const cartMatch = cookieHeader.match(/(?:^|;\s*)cart=([^;]+)/);
+  const cartCookieId = cartMatch ? decodeURIComponent(cartMatch[1]) : null;
+  console.log('[Cart Loader] cart cookie:', cartCookieId ? cartCookieId.slice(-12) : 'ABSENT');
   const cart = await context.cart.get();
-  return json({cart});
+  console.log('[Cart Loader] cart.totalQuantity:', cart?.totalQuantity);
+  return json({cart, _debug: {hasCookie: !!cartCookieId, qty: cart?.totalQuantity ?? 0}});
 }
 
 export async function action({request, context}) {
@@ -55,7 +60,7 @@ export async function action({request, context}) {
 }
 
 export default function CartRoute() {
-  const {cart} = useLoaderData();
+  const {cart, _debug} = useLoaderData();
   const urlParams =
     typeof window !== 'undefined'
       ? new URLSearchParams(window.location.search)
@@ -71,6 +76,9 @@ export default function CartRoute() {
             Erreur: {addError}
           </p>
         )}
+        <p style={{fontSize: '0.7rem', color: '#888', marginBottom: '1rem'}}>
+          debug: cookie={_debug?.hasCookie ? 'OUI' : 'NON'} qty={_debug?.qty}
+        </p>
         <a href="/collections/all" className="btn-primary">
           Continuer mes achats
         </a>
