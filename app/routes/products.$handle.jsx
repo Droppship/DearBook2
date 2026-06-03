@@ -1,4 +1,4 @@
-import {useLoaderData, Link} from '@remix-run/react';
+import {useLoaderData, Link, Form} from '@remix-run/react';
 import {json} from '@shopify/remix-oxygen';
 import {Image, Money, VariantSelector} from '@shopify/hydrogen';
 import {useState} from 'react';
@@ -190,7 +190,7 @@ export default function Product() {
           )}
 
           {/* Add to Cart */}
-          <form method="POST" action="/cart">
+          <Form method="POST" action="/cart" reloadDocument>
             <input
               type="hidden"
               name="cartFormInput"
@@ -208,7 +208,7 @@ export default function Product() {
                 ? '🛒 Ajouter au Panier'
                 : 'Rupture de stock'}
             </button>
-          </form>
+          </Form>
 
           {/* Trust Badges */}
           <div className="product-trust-badges">
