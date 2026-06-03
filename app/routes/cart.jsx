@@ -1,42 +1,41 @@
 import {CartForm} from '@shopify/hydrogen';
 import {json, redirect} from '@shopify/remix-oxygen';
 import {useLoaderData} from '@remix-run/react';
+import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
 
-export async function loader({context, request}) {
-  const cookieHeader = request.headers.get('Cookie') || '';
-  const cartMatch = cookieHeader.match(/(?:^|;\s*)cart=([^;]+)/);
-  const cartCookieId = cartMatch ? decodeURIComponent(cartMatch[1]) : null;
-  console.log('[Cart Loader] cart cookie:', cartCookieId ? cartCookieId.slice(-12) : 'ABSENT');
-  const cart = await context.cart.get();
-  console.log('[Cart Loader] cart.totalQuantity:', cart?.totalQuantity);
-  return json({cart, _debug: {hasCookie: !!cartCookieId, qty: cart?.totalQuantity ?? 0}});
+export async function loader({context}) {
+  const cartId = context.session.get('cartId');
+  if (!cartId) {
+    return json({cart: null});
+  }
+
+  const {cart} = await context.storefront.query(CART_QUERY, {
+    variables: {cartId, numCartLines: 100, country: 'CA', language: 'FR'},
+    cache: context.storefront.CacheNone(),
+  });
+
+  return json({cart});
 }
 
 export async function action({request, context}) {
   const {cart} = context;
-
   const formData = await request.formData();
   const {action, inputs} = CartForm.getFormInput(formData);
 
-  let result;
-  let addError = null;
+  if (action === CartForm.ACTIONS.LinesAdd) {
+    console.log('[Cart] LinesAdd mid:', inputs.lines?.[0]?.merchandiseId);
+    const result = await cart.addLines(inputs.lines);
+    console.log('[Cart] totalQuantity:', result?.cart?.totalQuantity);
 
-  switch (action) {
-    case CartForm.ACTIONS.LinesAdd: {
-      const mid = inputs.lines?.[0]?.merchandiseId;
-      console.log('[Cart] merchandiseId:', mid);
-      result = await cart.addLines(inputs.lines);
-      const errs = result?.errors || result?.userErrors;
-      console.log('[Cart] qty:', result?.cart?.totalQuantity, 'errors:', JSON.stringify(errs));
-      if (errs?.length) {
-        addError = errs.map((e) => e.message || e.code || 'unknown').join(', ');
-      } else if (!result?.cart) {
-        addError = 'Panier null - token ou permission invalide';
-      } else if (!result.cart.totalQuantity) {
-        addError = `Panier vide - mid=${mid ? mid.slice(-10) : 'MANQUANT'}`;
-      }
-      break;
+    if (result?.cart?.id) {
+      context.session.set('cartId', result.cart.id);
     }
+
+    return redirect('/cart');
+  }
+
+  let result;
+  switch (action) {
     case CartForm.ACTIONS.LinesUpdate:
       result = await cart.updateLines(inputs.lines);
       break;
@@ -47,38 +46,16 @@ export async function action({request, context}) {
       throw new Error(`Unknown cart action: ${action}`);
   }
 
-  const headers = result?.cart?.id
-    ? cart.setCartId(result.cart.id)
-    : new Headers();
-
-  if (action === CartForm.ACTIONS.LinesAdd) {
-    const params = addError ? `?err=${encodeURIComponent(addError)}` : '';
-    return redirect(`/cart${params}`, {headers});
-  }
-
-  return json(result, {headers});
+  return json(result);
 }
 
 export default function CartRoute() {
-  const {cart, _debug} = useLoaderData();
-  const urlParams =
-    typeof window !== 'undefined'
-      ? new URLSearchParams(window.location.search)
-      : new URLSearchParams();
-  const addError = urlParams.get('err');
+  const {cart} = useLoaderData();
 
   if (!cart || cart.totalQuantity === 0) {
     return (
       <div className="cart-empty">
         <h1>Votre panier est vide</h1>
-        {addError && (
-          <p style={{color: 'red', marginBottom: '1rem', fontSize: '0.85rem'}}>
-            Erreur: {addError}
-          </p>
-        )}
-        <p style={{fontSize: '0.7rem', color: '#888', marginBottom: '1rem'}}>
-          debug: cookie={_debug?.hasCookie ? 'OUI' : 'NON'} qty={_debug?.qty}
-        </p>
         <a href="/collections/all" className="btn-primary">
           Continuer mes achats
         </a>
@@ -122,3 +99,17 @@ export default function CartRoute() {
     </div>
   );
 }
+
+const CART_QUERY = `#graphql
+  query CartQuery(
+    $cartId: ID!
+    $numCartLines: Int = 100
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    cart(id: $cartId) {
+      ...CartApiQuery
+    }
+  }
+  ${CART_QUERY_FRAGMENT}
+`;
