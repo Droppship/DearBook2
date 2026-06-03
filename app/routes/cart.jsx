@@ -1,5 +1,5 @@
 import {CartForm} from '@shopify/hydrogen';
-import {json} from '@shopify/remix-oxygen';
+import {json, redirect} from '@shopify/remix-oxygen';
 import {useLoaderData} from '@remix-run/react';
 
 export async function loader({context}) {
@@ -30,6 +30,10 @@ export async function action({request, context}) {
   }
 
   const headers = cart.setCartId(result.cart.id);
+
+  if (action === CartForm.ACTIONS.LinesAdd) {
+    return redirect('/cart', {headers});
+  }
 
   return json(result, {headers});
 }
