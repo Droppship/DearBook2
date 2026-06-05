@@ -117,23 +117,11 @@ function HeroSection({featuredProduct}) {
 
         <div className="hero-image-wrapper">
           <div className="hero-image-glow" />
-          <Suspense fallback={<BookPlaceholder />}>
-            <Await resolve={featuredProduct}>
-              {(data) => {
-                const image = data?.products?.nodes?.[0]?.featuredImage;
-                return image ? (
-                  <Image
-                    data={image}
-                    className="hero-book-img"
-                    alt="Dad, I Want to Hear Your Story"
-                    sizes="(min-width: 768px) 370px, 250px"
-                  />
-                ) : (
-                  <BookPlaceholder />
-                );
-              }}
-            </Await>
-          </Suspense>
+          <img
+            src="https://cdn.shopify.com/s/files/1/0817/6422/1167/files/Screenshot_2026-05-25_21.55.43-removebg-preview.png"
+            className="hero-book-img"
+            alt="Dad, I Want to Hear Your Story"
+          />
         </div>
       </div>
     </section>
