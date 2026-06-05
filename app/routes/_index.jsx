@@ -21,7 +21,7 @@ export const meta = () => {
 export async function loader({context}) {
   const {storefront} = context;
   const featuredProduct = storefront.query(FEATURED_PRODUCT_QUERY, {
-    cache: storefront.CacheLong(),
+    cache: storefront.CacheNone(),
   });
   return defer({featuredProduct});
 }
