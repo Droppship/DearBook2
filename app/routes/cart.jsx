@@ -10,7 +10,7 @@ export async function loader({context}) {
   }
 
   const {cart} = await context.storefront.query(CART_QUERY, {
-    variables: {cartId, numCartLines: 100, country: 'CA', language: 'FR'},
+    variables: {cartId, numCartLines: 100, country: 'CA', language: 'EN'},
     cache: context.storefront.CacheNone(),
   });
 
@@ -53,12 +53,12 @@ export default function CartRoute() {
       <div className="cart-empty-page">
         <div className="cart-empty-inner">
           <div className="cart-empty-icon">🛒</div>
-          <h1 className="cart-empty-title">Votre panier est vide</h1>
+          <h1 className="cart-empty-title">Your cart is empty</h1>
           <p className="cart-empty-sub">
-            Vous n'avez pas encore ajouté de produit à votre panier.
+            You haven't added any products to your cart yet.
           </p>
           <Link to="/collections/all" className="btn-primary">
-            Découvrir notre livre →
+            Discover our book →
           </Link>
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function CartRoute() {
   return (
     <div className="cart-page">
       <div className="cart-container">
-        <h1 className="cart-title">Mon Panier</h1>
+        <h1 className="cart-title">My Cart</h1>
 
         <div className="cart-layout">
           {/* Items */}
@@ -87,7 +87,7 @@ export default function CartRoute() {
                   {line.merchandise.title !== 'Default Title' && (
                     <p className="cart-line-variant">{line.merchandise.title}</p>
                   )}
-                  <p className="cart-line-qty">Quantité : {line.quantity}</p>
+                  <p className="cart-line-qty">Quantity: {line.quantity}</p>
                 </div>
                 <div className="cart-line-price">
                   {parseFloat(line.cost.totalAmount.amount).toFixed(2)} {line.cost.totalAmount.currencyCode}
@@ -98,15 +98,15 @@ export default function CartRoute() {
 
           {/* Summary */}
           <div className="cart-summary">
-            <h2 className="cart-summary-title">Résumé de la commande</h2>
+            <h2 className="cart-summary-title">Order Summary</h2>
 
             <div className="cart-summary-row">
-              <span>Sous-total</span>
+              <span>Subtotal</span>
               <span>{parseFloat(cart.cost.subtotalAmount?.amount ?? cart.cost.totalAmount.amount).toFixed(2)} {cart.cost.totalAmount.currencyCode}</span>
             </div>
             <div className="cart-summary-row">
-              <span>Livraison</span>
-              <span className="cart-shipping">Calculée à la caisse</span>
+              <span>Shipping</span>
+              <span className="cart-shipping">Calculated at checkout</span>
             </div>
 
             <div className="cart-summary-divider" />
@@ -117,16 +117,16 @@ export default function CartRoute() {
             </div>
 
             <a href={cart.checkoutUrl} className="cart-checkout-btn">
-              Passer à la caisse →
+              Proceed to Checkout →
             </a>
 
             <div className="cart-trust">
-              <span>🔒 Paiement 100% sécurisé</span>
-              <span>↩️ Retour sous 30 jours</span>
+              <span>🔒 100% Secure Payment</span>
+              <span>↩️ 30-Day Returns</span>
             </div>
 
             <Link to="/collections/all" className="cart-continue">
-              ← Continuer mes achats
+              ← Continue Shopping
             </Link>
           </div>
         </div>

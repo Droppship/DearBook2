@@ -34,7 +34,7 @@ function HeaderMenu({menu, primaryDomainUrl, viewport, publicStoreDomain}) {
   return (
     <nav className={`header-menu-${viewport}`} role="navigation">
       <NavLink className={({isActive}) => `header-menu-item${isActive ? ' active' : ''}`} end prefetch="intent" to="/">
-        Accueil
+        Home
       </NavLink>
       <span className="header-menu-item header-menu-item-disabled">Catalogue</span>
       <span className="header-menu-item header-menu-item-disabled">Contact</span>
@@ -49,7 +49,7 @@ function CartBadge({count}) {
       {count !== null && count > 0 && (
         <span className="cart-count">{count}</span>
       )}
-      Panier
+      Cart
     </NavLink>
   );
 }
@@ -61,7 +61,7 @@ const FALLBACK_HEADER_MENU = {
       id: '1',
       resourceId: null,
       tags: [],
-      title: 'Accueil',
+      title: 'Home',
       type: 'HTTP',
       url: '/',
       items: [],
@@ -70,7 +70,7 @@ const FALLBACK_HEADER_MENU = {
       id: '2',
       resourceId: null,
       tags: [],
-      title: 'Notre Livre',
+      title: 'Our Book',
       type: 'HTTP',
       url: '/collections/all',
       items: [],
@@ -79,7 +79,7 @@ const FALLBACK_HEADER_MENU = {
       id: '3',
       resourceId: null,
       tags: [],
-      title: 'Témoignages',
+      title: 'Testimonials',
       type: 'HTTP',
       url: '/#testimonials',
       items: [],

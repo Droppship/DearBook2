@@ -12,8 +12,8 @@ export function Footer({menu, shop}) {
               📖 DearBook
             </a>
             <p className="footer-brand-desc">
-              Des cadeaux qui capturent les histoires précieuses de votre famille.
-              Parce que les souvenirs méritent d'être préservés pour toujours.
+              Gifts that capture your family's precious stories.
+              Because memories deserve to be preserved forever.
             </p>
             <div className="footer-social">
               <a
@@ -40,25 +40,25 @@ export function Footer({menu, shop}) {
             </div>
           </div>
 
-          {/* Boutique Links */}
+          {/* Shop Links */}
           <div>
-            <p className="footer-col-title">Boutique</p>
+            <p className="footer-col-title">Shop</p>
             <div className="footer-links">
-              <a href="/">Accueil</a>
-              <a href="/collections/all">Notre Livre</a>
-              <a href="/#testimonials">Témoignages</a>
+              <a href="/">Home</a>
+              <a href="/collections/all">Our Book</a>
+              <a href="/#testimonials">Testimonials</a>
               <a href="/#faq">FAQ</a>
             </div>
           </div>
 
-          {/* Service Client */}
+          {/* Customer Service */}
           <div>
-            <p className="footer-col-title">Service Client</p>
+            <p className="footer-col-title">Customer Service</p>
             <div className="footer-links">
-              <a href="/policies/refund-policy">Politique de retour</a>
-              <a href="/policies/shipping-policy">Livraison</a>
-              <a href="/policies/privacy-policy">Confidentialité</a>
-              <a href="/policies/terms-of-service">CGV</a>
+              <a href="/policies/refund-policy">Return Policy</a>
+              <a href="/policies/shipping-policy">Shipping</a>
+              <a href="/policies/privacy-policy">Privacy Policy</a>
+              <a href="/policies/terms-of-service">Terms of Service</a>
             </div>
           </div>
 
@@ -66,8 +66,8 @@ export function Footer({menu, shop}) {
           <div>
             <p className="footer-col-title">Newsletter</p>
             <p className="footer-newsletter-desc">
-              Recevez nos offres exclusives et nos conseils pour créer de beaux
-              souvenirs en famille.
+              Receive our exclusive offers and tips for creating beautiful
+              family memories.
             </p>
             <NewsletterForm />
           </div>
@@ -76,7 +76,7 @@ export function Footer({menu, shop}) {
         {/* Bottom Bar */}
         <div className="footer-bottom">
           <p className="footer-copyright">
-            © {new Date().getFullYear()} DearBook · dearbook.ca · Tous droits réservés.
+            © {new Date().getFullYear()} DearBook · dearbook.ca · All rights reserved.
           </p>
           <div className="footer-payments">
             {['VISA', 'MC', 'AMEX', 'PayPal', 'Apple Pay'].map((p) => (
@@ -103,7 +103,7 @@ function NewsletterForm() {
   if (submitted) {
     return (
       <p className="footer-newsletter-success">
-        ✓ Merci! Vous êtes maintenant inscrit(e).
+        ✓ Thank you! You are now subscribed.
       </p>
     );
   }
@@ -113,13 +113,13 @@ function NewsletterForm() {
       <input
         type="email"
         className="footer-newsletter-input"
-        placeholder="Votre adresse email"
+        placeholder="Your email address"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
       />
       <button type="submit" className="footer-newsletter-btn">
-        S'inscrire
+        Subscribe
       </button>
     </form>
   );

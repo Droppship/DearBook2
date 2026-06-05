@@ -80,7 +80,7 @@ function getLocaleFromRequest(request) {
   const firstPathPart = url.pathname.split('/')[1]?.toUpperCase() ?? '';
 
   let pathPrefix = '';
-  let language = 'FR';
+  let language = 'EN';
   let country = 'CA';
 
   if (/^[A-Z]{2}-[A-Z]{2}$/i.test(firstPathPart)) {

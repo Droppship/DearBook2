@@ -5,14 +5,14 @@ import {Image, Money} from '@shopify/hydrogen';
 
 export const meta = () => {
   return [
-    {title: 'DearBook | Papa, Raconte-Moi Ton Histoire'},
+    {title: 'DearBook | Dad, Tell Me Your Story'},
     {
       name: 'description',
       content:
-        "Le cadeau parfait pour votre père — un journal guidé avec plus de 200 questions pour capturer ses précieux souvenirs à jamais. Livraison gratuite sur dearbook.ca",
+        "The perfect gift for your father — a guided journal with 200+ questions to capture his precious memories forever.",
     },
-    {property: 'og:title', content: 'DearBook | Papa, Raconte-Moi Ton Histoire'},
-    {property: 'og:description', content: "Le cadeau parfait pour Papa — un journal guidé avec 200+ questions pour capturer ses souvenirs pour toujours."},
+    {property: 'og:title', content: 'DearBook | Dad, Tell Me Your Story'},
+    {property: 'og:description', content: "The perfect gift for Dad — a guided journal with 200+ questions to capture his memories forever."},
     {property: 'og:url', content: 'https://dearbook.ca'},
     {name: 'twitter:card', content: 'summary_large_image'},
   ];
@@ -48,22 +48,22 @@ function HeroSection({featuredProduct}) {
     <section className="hero">
       <div className="hero-inner">
         <div className="hero-content">
-          <div className="hero-badge">🎁 Fête des Pères — Édition Spéciale</div>
+          <div className="hero-badge">🎁 Father's Day — Special Edition</div>
 
           <h1 className="hero-title">
-            Papa,{' '}
-            <span>Raconte-Moi</span>
-            {' '}Ton Histoire
+            Dad,{' '}
+            <span>Tell Me</span>
+            {' '}Your Story
           </h1>
 
           <p className="hero-subtitle">
-            Un journal guidé avec plus de 200 questions touchantes pour capturer
-            les souvenirs précieux de votre père… avant qu'il ne soit trop tard.
+            A guided journal with over 200 heartfelt questions to capture
+            your father's precious memories… before it's too late.
           </p>
 
           <div className="hero-rating">
             <span className="stars">★★★★★</span>
-            <span className="hero-rating-text">4.9/5 · Plus de 50 000 familles</span>
+            <span className="hero-rating-text">4.9/5 · Over 50,000 families</span>
           </div>
 
           <Suspense fallback={<StaticPrice />}>
@@ -73,7 +73,7 @@ function HeroSection({featuredProduct}) {
                 return (
                   <div className="hero-price">
                     <span className="hero-price-current">
-                      {variant?.price ? <Money data={variant.price} /> : '29,99 €'}
+                      {variant?.price ? <Money data={variant.price} /> : '$29.99'}
                     </span>
                     {variant?.compareAtPrice && (
                       <span className="hero-price-original">
@@ -91,7 +91,7 @@ function HeroSection({featuredProduct}) {
             <Suspense
               fallback={
                 <Link to="/collections/all" className="btn-primary">
-                  Commander Maintenant →
+                  Order Now →
                 </Link>
               }
             >
@@ -101,7 +101,7 @@ function HeroSection({featuredProduct}) {
                   const to = product ? `/products/${product.handle}` : '/collections/all';
                   return (
                     <Link to={to} className="btn-primary">
-                      Commander Maintenant →
+                      Order Now →
                     </Link>
                   );
                 }}
@@ -110,8 +110,8 @@ function HeroSection({featuredProduct}) {
           </div>
 
           <div className="hero-trust-badges">
-            <span className="hero-trust-badge">🔒 Paiement Sécurisé</span>
-            <span className="hero-trust-badge">↩️ Garantie 30 Jours</span>
+            <span className="hero-trust-badge">🔒 Secure Payment</span>
+            <span className="hero-trust-badge">↩️ 30-Day Guarantee</span>
           </div>
         </div>
 
@@ -131,8 +131,8 @@ function HeroSection({featuredProduct}) {
 function StaticPrice() {
   return (
     <div className="hero-price">
-      <span className="hero-price-current">29,99 €</span>
-      <span className="hero-price-original">42,99 €</span>
+      <span className="hero-price-current">$29.99</span>
+      <span className="hero-price-original">$42.99</span>
       <span className="hero-price-badge">−30%</span>
     </div>
   );
@@ -142,7 +142,7 @@ function BookPlaceholder() {
   return (
     <div className="hero-book-placeholder">
       <span>📖</span>
-      <span style={{fontSize: '0.9rem'}}>Chargement…</span>
+      <span style={{fontSize: '0.9rem'}}>Loading…</span>
     </div>
   );
 }
@@ -150,10 +150,10 @@ function BookPlaceholder() {
 /* ─── TRUST BAR ─────────────────────────────────────────── */
 function TrustBar() {
   const items = [
-    {icon: '👨‍👧', label: '50 000+', sub: 'Familles'},
-    {icon: '⭐', label: '4.9/5', sub: 'Avis clients'},
-    {icon: '🔒', label: 'Paiement', sub: '100% Sécurisé'},
-    {icon: '↩️', label: 'Garantie', sub: '30 Jours'},
+    {icon: '👨‍👧', label: '50,000+', sub: 'Families'},
+    {icon: '⭐', label: '4.9/5', sub: 'Customer Reviews'},
+    {icon: '🔒', label: 'Payment', sub: '100% Secure'},
+    {icon: '↩️', label: 'Guarantee', sub: '30 Days'},
   ];
   return (
     <div className="trust-bar">
@@ -177,34 +177,34 @@ function FeaturesSection() {
   const features = [
     {
       icon: '📝',
-      title: '200+ Questions Guidées',
-      desc: "Des questions soigneusement choisies pour révéler les histoires les plus précieuses de la vie de votre père, page après page.",
+      title: '200+ Guided Questions',
+      desc: "Carefully chosen questions to uncover the most precious stories from your father's life, page after page.",
     },
     {
       icon: '💙',
-      title: 'Souvenirs Éternels',
-      desc: "Créez un héritage familial que vos enfants et petits-enfants pourront chérir pendant des générations.",
+      title: 'Eternal Memories',
+      desc: "Create a family legacy that your children and grandchildren will treasure for generations to come.",
     },
     {
       icon: '📚',
-      title: 'Qualité Premium',
-      desc: "Couverture rigide élégante, papier épais de haute qualité. Un objet conçu pour durer toute une vie.",
+      title: 'Premium Quality',
+      desc: "Elegant hardcover, thick high-quality paper. An object built to last a lifetime.",
     },
     {
       icon: '🎁',
-      title: 'Cadeau Inoubliable',
-      desc: "Le cadeau le plus touchant que vous puissiez offrir — pour la Fête des Pères, un anniversaire ou Noël.",
+      title: 'Unforgettable Gift',
+      desc: "The most touching gift you can give — for Father's Day, a birthday, or Christmas.",
     },
   ];
 
   return (
     <section className="section section-white">
       <div className="section-inner">
-        <h2 className="section-title">Pourquoi Ce Journal est Unique</h2>
+        <h2 className="section-title">Why This Journal is Unique</h2>
         <div className="section-divider" />
         <p className="section-subtitle">
-          Un livre conçu pour transformer de simples conversations en souvenirs
-          précieux qui traverseront les générations.
+          A book designed to turn simple conversations into precious memories
+          that will last through the generations.
         </p>
         <div className="features-grid">
           {features.map((f) => (
@@ -223,21 +223,21 @@ function FeaturesSection() {
 /* ─── SAMPLE QUESTIONS ──────────────────────────────────── */
 function SampleQuestionsSection() {
   const questions = [
-    "Quel était ton surnom d'enfant, et comment l'as-tu obtenu?",
-    "Quelle est la leçon la plus importante que la vie t'ait enseignée?",
-    "Quel souvenir d'enfance te fait encore sourire aujourd'hui?",
-    "Comment as-tu rencontré Maman, et qu'est-ce qui t'a séduit chez elle?",
-    "Quel moment de ta vie as-tu été le plus fier de toi?",
-    "Qu'aurais-tu voulu que je sache plus tôt dans ma vie?",
+    "What was your childhood nickname, and how did you get it?",
+    "What is the most important lesson life has taught you?",
+    "What childhood memory still makes you smile today?",
+    "How did you meet Mom, and what drew you to her?",
+    "What moment in your life are you most proud of?",
+    "What do you wish you had known earlier in life?",
   ];
 
   return (
     <section className="section section-cream">
       <div className="section-inner">
-        <h2 className="section-title">Un Aperçu à l'Intérieur du Journal</h2>
+        <h2 className="section-title">A Peek Inside the Journal</h2>
         <div className="section-divider" />
         <p className="section-subtitle">
-          Voici quelques exemples des 200+ questions qui attendent votre père…
+          Here are a few examples of the 200+ questions waiting for your father…
         </p>
         <div className="questions-grid">
           {questions.map((q, i) => (
@@ -248,7 +248,7 @@ function SampleQuestionsSection() {
           ))}
         </div>
         <p className="questions-note">
-          + 194 autres questions tout aussi touchantes pour explorer toute une vie…
+          + 194 more equally touching questions to explore a lifetime of stories…
         </p>
       </div>
     </section>
@@ -259,35 +259,35 @@ function SampleQuestionsSection() {
 function TestimonialsSection() {
   const reviews = [
     {
-      text: "J'ai offert ce journal à mon père pour la Fête des Pères. Il a pleuré en le feuilletant. On a passé des heures à le remplir ensemble — c'est le plus beau souvenir qu'on ait jamais créé.",
+      text: "I gave this journal to my dad for Father's Day. He cried when he flipped through it. We spent hours filling it in together — it's the most beautiful memory we've ever made.",
       author: 'Marie L.',
-      location: 'Paris',
+      location: 'Montreal',
       initial: 'M',
-      tag: 'Fête des Pères',
+      tag: "Father's Day",
     },
     {
-      text: "Mon père est atteint d'Alzheimer à un stade précoce. Ce journal nous a permis de capturer ses souvenirs pendant qu'il en était encore capable. C'est inestimable. Merci du fond du cœur.",
+      text: "My father has early-stage Alzheimer's. This journal allowed us to capture his memories while he still could. It's priceless. Thank you from the bottom of my heart.",
       author: 'Thomas B.',
-      location: 'Lyon',
+      location: 'Toronto',
       initial: 'T',
-      tag: 'Témoignage émouvant',
+      tag: 'Moving Testimonial',
     },
     {
-      text: "Super cadeau pour l'anniversaire de mon père! Il a adoré répondre aux questions et moi j'ai découvert des choses sur lui que je ne connaissais pas après 35 ans! Je recommande à 1000%.",
+      text: "Amazing gift for my dad's birthday! He loved answering the questions and I discovered things about him I never knew after 35 years! I recommend it 1000%.",
       author: 'Sophie M.',
-      location: 'Bordeaux',
+      location: 'Vancouver',
       initial: 'S',
-      tag: 'Anniversaire',
+      tag: 'Birthday',
     },
   ];
 
   return (
     <section className="section section-white">
       <div className="section-inner">
-        <h2 className="section-title">Ce Que Disent les Familles</h2>
+        <h2 className="section-title">What Families Are Saying</h2>
         <div className="section-divider" />
         <p className="section-subtitle">
-          Plus de 50 000 familles ont déjà offert ce cadeau inoubliable.
+          Over 50,000 families have already given this unforgettable gift.
         </p>
         <div className="testimonials-grid">
           {reviews.map((r) => (
@@ -315,22 +315,22 @@ function TestimonialsSection() {
 /* ─── GIFT OCCASIONS ────────────────────────────────────── */
 function GiftSection() {
   const occasions = [
-    {icon: '👨‍👧', title: 'Fête des Pères'},
-    {icon: '🎂', title: 'Anniversaire'},
-    {icon: '🎄', title: 'Noël'},
-    {icon: '💝', title: 'Cadeau Surprise'},
-    {icon: '👴', title: 'Grand-Père'},
-    {icon: '🫂', title: 'Beau-Père'},
+    {icon: '👨‍👧', title: "Father's Day"},
+    {icon: '🎂', title: 'Birthday'},
+    {icon: '🎄', title: 'Christmas'},
+    {icon: '💝', title: 'Surprise Gift'},
+    {icon: '👴', title: 'Grandfather'},
+    {icon: '🫂', title: 'Stepfather'},
   ];
 
   return (
     <section className="section section-cream">
       <div className="section-inner">
-        <h2 className="section-title">Le Cadeau Parfait pour Toutes les Occasions</h2>
+        <h2 className="section-title">The Perfect Gift for Every Occasion</h2>
         <div className="section-divider" />
         <p className="section-subtitle">
-          Que ce soit pour la Fête des Pères, un anniversaire ou Noël — ce journal
-          est toujours le cadeau dont on se souvient.
+          Whether it's Father's Day, a birthday, or Christmas — this journal
+          is always the gift everyone remembers.
         </p>
         <div className="gift-grid">
           {occasions.map((o) => (
@@ -354,18 +354,17 @@ function GuaranteeSection() {
           <div className="guarantee-badge">
             <span className="guarantee-badge-icon">🛡️</span>
             <span className="guarantee-badge-text">
-              Garantie
+              30-Day
               <br />
-              30 Jours
+              Guarantee
             </span>
           </div>
         </div>
-        <h2 className="guarantee-title">Satisfait ou Remboursé</h2>
+        <h2 className="guarantee-title">Satisfaction Guaranteed</h2>
         <p className="guarantee-text">
-          Nous sommes tellement convaincus que vous allez adorer ce journal que
-          nous offrons une garantie de remboursement complète de 30 jours. Si pour
-          quelque raison que ce soit vous n'êtes pas satisfait, contactez-nous et
-          nous vous remboursons intégralement — sans questions posées.
+          We are so confident you will love this journal that we offer a full
+          30-day money-back guarantee. If for any reason you are not satisfied,
+          contact us and we will refund you in full — no questions asked.
         </p>
       </div>
     </section>
@@ -379,19 +378,19 @@ function FinalCTA({featuredProduct}) {
     <section className="final-cta">
       <div className="final-cta-inner">
         <h2 className="final-cta-title">
-          Ne Laissez Pas les{' '}
-          <span>Histoires de Papa</span>
-          {' '}Disparaître
+          Don't Let{' '}
+          <span>Dad's Stories</span>
+          {' '}Disappear
         </h2>
         <p className="final-cta-subtitle">
-          Chaque jour qui passe est une histoire de moins. Offrez-lui ce journal
-          aujourd'hui et capturez les souvenirs qui comptent vraiment — pour lui et
-          pour toute votre famille.
+          Every day that passes is one less story to tell. Give him this journal
+          today and capture the memories that truly matter — for him and for
+          your whole family.
         </p>
         <Suspense
           fallback={
             <Link to="/collections/all" className="btn-primary">
-              Commander Maintenant →
+              Order Now →
             </Link>
           }
         >
@@ -401,7 +400,7 @@ function FinalCTA({featuredProduct}) {
               const to = product ? `/products/${product.handle}` : '/collections/all';
               return (
                 <Link to={to} className="btn-primary">
-                  Commander Maintenant →
+                  Order Now →
                 </Link>
               );
             }}

@@ -5,12 +5,12 @@ import {useState} from 'react';
 
 export const meta = ({data}) => {
   return [
-    {title: `DearBook | ${data?.product?.title ?? 'Produit'}`},
+    {title: `DearBook | ${data?.product?.title ?? 'Product'}`},
     {
       name: 'description',
       content:
         data?.product?.description?.slice(0, 155) ??
-        "Journal guidé pour capturer l'histoire de votre père.",
+        "A guided journal to capture your father's story.",
     },
   ];
 };
@@ -39,45 +39,45 @@ export default function Product() {
   const staticReviews = [
     {
       stars: 5,
-      text: "Cadeau parfait pour la Fête des Pères! Mon père a adoré répondre à toutes les questions. On a découvert des histoires incroyables qu'il n'avait jamais partagées.",
+      text: "Perfect gift for Father's Day! My dad loved answering all the questions. We discovered incredible stories he had never shared before.",
       name: 'Claire D.',
-      location: 'Paris',
-      date: 'il y a 2 semaines',
+      location: 'Montreal',
+      date: '2 weeks ago',
     },
     {
       stars: 5,
-      text: "La qualité du livre est excellente. Les questions sont bien pensées et touchantes. Mon père et moi avons passé des heures formidables ensemble.",
+      text: "The quality of the book is excellent. The questions are thoughtful and touching. My dad and I spent wonderful hours together filling it in.",
       name: 'Lucas M.',
-      location: 'Lyon',
-      date: 'il y a 1 mois',
+      location: 'Toronto',
+      date: '1 month ago',
     },
     {
       stars: 5,
-      text: "Je l'ai offert à mon beau-père pour son anniversaire. Il a été très ému. Un cadeau qui a bien plus de valeur que son prix!",
+      text: "I gave it to my stepfather for his birthday. He was very moved. A gift that is worth so much more than its price!",
       name: 'Emma B.',
-      location: 'Marseille',
-      date: 'il y a 3 semaines',
+      location: 'Vancouver',
+      date: '3 weeks ago',
     },
     {
       stars: 4,
-      text: "Très beau livre, bien relié. Les questions sont vraiment bien choisies. Livraison rapide et emballage soigné.",
+      text: "Beautiful book, well bound. The questions are really well chosen. Fast delivery and careful packaging.",
       name: 'Pierre L.',
-      location: 'Bordeaux',
-      date: 'il y a 2 mois',
+      location: 'Calgary',
+      date: '2 months ago',
     },
     {
       stars: 5,
-      text: "Mon père a 78 ans et commence à oublier certains souvenirs. Ce livre nous a permis de capturer tant d'histoires précieuses. Merci infiniment.",
+      text: "My father is 78 and is starting to forget some memories. This book allowed us to capture so many precious stories. Thank you so much.",
       name: 'Isabelle K.',
-      location: 'Nice',
-      date: 'il y a 1 semaine',
+      location: 'Ottawa',
+      date: '1 week ago',
     },
     {
       stars: 5,
-      text: "Commande facile, livraison en 7 jours, produit conforme à la description. Très satisfaite! Je vais en offrir un à ma belle-mère aussi.",
+      text: "Easy to order, delivered in 7 days, product exactly as described. Very satisfied! I'm going to get one for my mother-in-law too.",
       name: 'Julien R.',
-      location: 'Toulouse',
-      date: 'il y a 3 semaines',
+      location: 'Edmonton',
+      date: '3 weeks ago',
     },
   ];
 
@@ -93,9 +93,9 @@ export default function Product() {
     <div className="product-page">
       {/* Breadcrumb */}
       <div className="product-breadcrumb">
-        <Link to="/">Accueil</Link>
+        <Link to="/">Home</Link>
         <span>›</span>
-        <Link to="/collections/all">Boutique</Link>
+        <Link to="/collections/all">Shop</Link>
         <span>›</span>
         <span>{product.title}</span>
       </div>
@@ -125,7 +125,7 @@ export default function Product() {
           <div className="product-badge-row">
             <span className="badge badge-bestseller">Bestseller</span>
             {selectedVariant?.availableForSale && (
-              <span className="badge badge-instock">✓ En stock</span>
+              <span className="badge badge-instock">✓ In Stock</span>
             )}
           </div>
 
@@ -139,7 +139,7 @@ export default function Product() {
           <div className="product-stars-row">
             <span className="stars">★★★★★</span>
             <span className="product-review-count">
-              4.9/5 ({staticReviews.length * 474} avis)
+              4.9/5 ({staticReviews.length * 474} reviews)
             </span>
           </div>
 
@@ -154,14 +154,14 @@ export default function Product() {
                 <span className="product-price-original">
                   <Money data={selectedVariant.compareAtPrice} />
                 </span>
-                <span className="product-saving">Économisez 30%</span>
+                <span className="product-saving">Save 30%</span>
               </>
             )}
           </div>
 
           <div className="product-divider" />
 
-          {/* Variant Selector — masqué si une seule variante "Default Title" */}
+          {/* Variant Selector — hidden if single "Default Title" variant */}
           {!(product.options.length === 1 && product.options[0].values.length === 1 && product.options[0].values[0] === 'Default Title') && (
             <VariantSelector
               handle={product.handle}
@@ -205,8 +205,8 @@ export default function Product() {
               disabled={!selectedVariant?.availableForSale || !selectedVariant?.id}
             >
               {selectedVariant?.availableForSale
-                ? '🛒 Ajouter au Panier'
-                : 'Rupture de stock'}
+                ? '🛒 Add to Cart'
+                : 'Out of Stock'}
             </button>
           </Form>
 
@@ -214,24 +214,24 @@ export default function Product() {
           <div className="product-trust-badges">
             <div className="product-trust-badge">
               <span className="product-trust-badge-icon">🔒</span>
-              <span className="product-trust-badge-text">Paiement Sécurisé</span>
+              <span className="product-trust-badge-text">Secure Payment</span>
             </div>
             <div className="product-trust-badge">
               <span className="product-trust-badge-icon">↩️</span>
-              <span className="product-trust-badge-text">Retour 30 Jours</span>
+              <span className="product-trust-badge-text">30-Day Returns</span>
             </div>
             <div className="product-trust-badge">
               <span className="product-trust-badge-icon">😊</span>
-              <span className="product-trust-badge-text">Papa Heureux Garanti</span>
+              <span className="product-trust-badge-text">Happy Dad Guaranteed</span>
             </div>
           </div>
 
           {/* Feature Checklist */}
           <ul className="product-features-list">
-            <li>Plus de 200 questions soigneusement sélectionnées</li>
-            <li>Couverture rigide premium de haute qualité</li>
-            <li>Format idéal pour écrire confortablement</li>
-            <li>Parfait comme cadeau pour la Fête des Pères</li>
+            <li>Over 200 carefully selected guided questions</li>
+            <li>Premium high-quality hardcover</li>
+            <li>Ideal format for comfortable writing</li>
+            <li>Perfect gift for Father's Day</li>
           </ul>
         </div>
       </div>
@@ -249,8 +249,8 @@ export default function Product() {
               {tab === 'description'
                 ? 'Description'
                 : tab === 'details'
-                ? 'Détails du produit'
-                : `Avis clients (${staticReviews.length * 474})`}
+                ? 'Product Details'
+                : `Customer Reviews (${staticReviews.length * 474})`}
             </button>
           ))}
         </div>
@@ -273,27 +273,27 @@ export default function Product() {
               <ul className="product-details-list">
                 <li>
                   <strong>Format</strong>
-                  <span>Relié rigide (Hardcover)</span>
+                  <span>Hardcover</span>
                 </li>
                 <li>
                   <strong>Pages</strong>
-                  <span>200+ pages de questions guidées</span>
+                  <span>200+ pages of guided questions</span>
                 </li>
                 <li>
                   <strong>Dimensions</strong>
-                  <span>20 × 14 cm</span>
+                  <span>8 × 5.5 in</span>
                 </li>
                 <li>
-                  <strong>Langue</strong>
-                  <span>Anglais (titre) — Journal universel</span>
+                  <strong>Language</strong>
+                  <span>English</span>
                 </li>
                 <li>
-                  <strong>Emballage</strong>
-                  <span>Emballage cadeau soigné inclus</span>
+                  <strong>Packaging</strong>
+                  <span>Careful gift packaging included</span>
                 </li>
                 <li>
-                  <strong>Garantie</strong>
-                  <span>Satisfait ou remboursé sous 30 jours</span>
+                  <strong>Guarantee</strong>
+                  <span>30-day satisfaction guarantee</span>
                 </li>
               </ul>
             </div>
@@ -307,7 +307,7 @@ export default function Product() {
                   <div className="reviews-score-number">4.9</div>
                   <div className="reviews-score-stars">★★★★★</div>
                   <div className="reviews-score-count">
-                    {staticReviews.length * 474} avis
+                    {staticReviews.length * 474} reviews
                   </div>
                 </div>
                 <div className="reviews-bars">
@@ -332,7 +332,7 @@ export default function Product() {
                     <div className="review-meta">
                       {r.name} — {r.location}
                     </div>
-                    <div className="review-verified">✓ Achat vérifié · {r.date}</div>
+                    <div className="review-verified">✓ Verified Purchase · {r.date}</div>
                   </div>
                 ))}
               </div>
@@ -347,30 +347,30 @@ export default function Product() {
 function DefaultDescription() {
   return (
     <>
-      <h2>Un cadeau qui capture une vie entière</h2>
+      <h2>A Gift That Captures a Lifetime</h2>
       <p>
-        <em>Dad, I Want to Hear Your Story</em> est bien plus qu'un simple journal.
-        C'est une invitation pour votre père à partager son histoire, ses rêves,
-        ses souvenirs et les leçons qu'il a apprises tout au long de sa vie.
+        <em>Dad, I Want to Hear Your Story</em> is so much more than a simple journal.
+        It's an invitation for your father to share his story, his dreams,
+        his memories, and the lessons he's learned throughout his life.
       </p>
-      <h3>Ce que vous allez découvrir</h3>
+      <h3>What You'll Discover</h3>
       <ul>
-        <li>Les histoires d'enfance que votre père n'a peut-être jamais partagées</li>
-        <li>Les moments qui ont façonné qui il est aujourd'hui</li>
-        <li>Ses rêves, ses espoirs et ses regrets</li>
-        <li>Les conseils qu'il vous donnerait s'il pouvait tout recommencer</li>
-        <li>Son histoire d'amour avec votre mère</li>
+        <li>The childhood stories your father may have never shared</li>
+        <li>The moments that shaped who he is today</li>
+        <li>His dreams, hopes, and regrets</li>
+        <li>The advice he would give you if he could start over</li>
+        <li>His love story with your mother</li>
       </ul>
       <p>
-        Ce journal est conçu pour être rempli à son propre rythme, question par
-        question, souvenir par souvenir. Chaque page est une fenêtre sur sa vie
-        — et un trésor que votre famille pourra chérir pour toujours.
+        This journal is designed to be filled at his own pace, question by
+        question, memory by memory. Each page is a window into his life
+        — and a treasure your family will cherish forever.
       </p>
-      <h3>Un objet de qualité</h3>
+      <h3>A Quality Object</h3>
       <p>
-        La couverture rigide premium et le papier épais de haute qualité font de
-        ce journal un objet conçu pour durer des décennies. Pas un simple carnet
-        — un véritable héritage familial.
+        The premium hardcover and thick high-quality paper make this
+        journal an object built to last for decades. Not just a notebook
+        — a true family heirloom.
       </p>
     </>
   );

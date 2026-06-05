@@ -33,7 +33,7 @@ export default function Collection() {
       <Pagination connection={collection.products}>
         {({nodes, PreviousLink, NextLink}) => (
           <>
-            <div className="pagination-links"><PreviousLink>← Précédent</PreviousLink></div>
+            <div className="pagination-links"><PreviousLink>← Previous</PreviousLink></div>
             <div className="products-grid">
               {nodes.map((product) => (
                 <Link
@@ -55,7 +55,7 @@ export default function Collection() {
                 </Link>
               ))}
             </div>
-            <div className="pagination-links"><NextLink>Suivant →</NextLink></div>
+            <div className="pagination-links"><NextLink>Next →</NextLink></div>
           </>
         )}
       </Pagination>
