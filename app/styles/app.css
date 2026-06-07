@@ -1757,8 +1757,8 @@ button[type="submit"]:hover:not(:disabled) {
   .hero-rating, .hero-price { justify-content: center; }
   .hero-subtitle { margin: 0 auto; }
   .hero-image-wrapper { order: -1; }
-  .hero-book-img { max-width: 250px; }
-  .hero-book-placeholder { max-width: 250px; }
+  .hero-book-img { max-width: 340px; width: 85vw; }
+  .hero-book-placeholder { max-width: 340px; }
 
   .section { padding: 3.5rem 1.5rem; }
 
@@ -1779,7 +1779,7 @@ button[type="submit"]:hover:not(:disabled) {
 
 @media (max-width: 480px) {
   .hero-title { font-size: 1.9rem; }
-  .hero-book-img, .hero-book-placeholder { max-width: 210px; }
+  .hero-book-img, .hero-book-placeholder { max-width: 300px; width: 80vw; }
   .features-grid { grid-template-columns: 1fr; }
   .gift-grid { grid-template-columns: repeat(2, 1fr); }
   .product-trust-badges { grid-template-columns: repeat(3, 1fr); }
