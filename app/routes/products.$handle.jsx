@@ -1,17 +1,19 @@
 import {useLoaderData, Link, Form} from '@remix-run/react';
 import {json} from '@shopify/remix-oxygen';
 import {Image, Money, VariantSelector} from '@shopify/hydrogen';
-import {useState} from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 export const meta = ({data}) => {
   return [
-    {title: `DearBook | ${data?.product?.title ?? 'Product'}`},
+    {title: `DearBook | ${data?.product?.title ?? 'Product'} — The #1 Gift for Fathers`},
     {
       name: 'description',
       content:
         data?.product?.description?.slice(0, 155) ??
-        "A guided journal to capture your father's story.",
+        "A guided journal to capture your father's story. 200+ questions, premium hardcover. Rated 4.9/5.",
     },
+    {property: 'og:title', content: `DearBook | ${data?.product?.title ?? 'Product'}`},
+    {name: 'robots', content: 'index, follow'},
   ];
 };
 
@@ -35,6 +37,8 @@ export default function Product() {
   const {product} = useLoaderData();
   const [selectedVariant, setSelectedVariant] = useState(product.variants.nodes[0]);
   const [activeTab, setActiveTab] = useState('description');
+
+  const deliveryDate = getEstimatedDelivery();
 
   const staticReviews = [
     {
@@ -89,9 +93,16 @@ export default function Product() {
     {n: 1, pct: '0%', width: '0%'},
   ];
 
+  const productFaqs = [
+    {q: 'How many questions are in the journal?', a: 'Over 200 carefully curated questions spanning childhood, family, career, love, life lessons, and legacy.'},
+    {q: 'What is the paper quality like?', a: 'We use thick, acid-free archival paper (120gsm) that resists yellowing and is designed to last for decades.'},
+    {q: 'Is this suitable for grandfathers too?', a: 'Absolutely! The questions are designed for any father figure — dads, grandfathers, stepfathers, and mentors.'},
+    {q: 'Does it come in gift packaging?', a: 'Yes! Every DearBook arrives in elegant, ready-to-gift packaging with a personal note card included.'},
+    {q: 'What are the dimensions?', a: 'The journal measures 8 × 5.5 inches — the ideal size for comfortable writing and shelf storage.'},
+  ];
+
   return (
     <div className="product-page">
-      {/* Breadcrumb */}
       <div className="product-breadcrumb">
         <Link to="/">Home</Link>
         <span>›</span>
@@ -101,32 +112,41 @@ export default function Product() {
       </div>
 
       <div className="product-layout">
-        {/* ── Gallery ── */}
+        {/* Gallery */}
         <div className="product-gallery">
-          {selectedVariant?.image ? (
-            <Image
-              data={selectedVariant.image}
-              className="product-main-img"
-              sizes="(min-width: 768px) 50vw, 100vw"
-            />
-          ) : product.featuredImage ? (
-            <Image
-              data={product.featuredImage}
-              className="product-main-img"
-              sizes="(min-width: 768px) 50vw, 100vw"
-            />
-          ) : (
-            <div className="product-gallery-placeholder">📖</div>
-          )}
+          <div className="product-gallery-main">
+            {selectedVariant?.image ? (
+              <Image
+                data={selectedVariant.image}
+                className="product-main-img"
+                sizes="(min-width: 768px) 50vw, 100vw"
+              />
+            ) : product.featuredImage ? (
+              <Image
+                data={product.featuredImage}
+                className="product-main-img"
+                sizes="(min-width: 768px) 50vw, 100vw"
+              />
+            ) : (
+              <div className="product-gallery-placeholder">📖</div>
+            )}
+            <div className="product-gallery-badge">BESTSELLER</div>
+          </div>
+          <div className="product-gallery-trust">
+            <span>🔒 Secure Payment</span>
+            <span>🚚 Free Shipping</span>
+            <span>↩️ 30-Day Returns</span>
+          </div>
         </div>
 
-        {/* ── Info Panel ── */}
+        {/* Info Panel */}
         <div className="product-info-panel">
           <div className="product-badge-row">
-            <span className="badge badge-bestseller">Bestseller</span>
+            <span className="badge badge-bestseller">🏆 Bestseller</span>
             {selectedVariant?.availableForSale && (
               <span className="badge badge-instock">✓ In Stock</span>
             )}
+            <span className="badge badge-limited">🔥 Selling Fast</span>
           </div>
 
           <div>
@@ -154,14 +174,45 @@ export default function Product() {
                 <span className="product-price-original">
                   <Money data={selectedVariant.compareAtPrice} />
                 </span>
-                <span className="product-saving">Save 30%</span>
+                <span className="product-saving">You save 30%</span>
               </>
             )}
           </div>
 
+          {/* Benefits */}
+          <div className="product-benefits">
+            <div className="product-benefit">
+              <span className="product-benefit-icon">📝</span>
+              <div>
+                <strong>200+ Guided Questions</strong>
+                <span>Carefully crafted by family therapists</span>
+              </div>
+            </div>
+            <div className="product-benefit">
+              <span className="product-benefit-icon">💎</span>
+              <div>
+                <strong>Premium Hardcover</strong>
+                <span>Built to last for generations</span>
+              </div>
+            </div>
+            <div className="product-benefit">
+              <span className="product-benefit-icon">🎁</span>
+              <div>
+                <strong>Gift-Ready Packaging</strong>
+                <span>Beautiful box, ready to give</span>
+              </div>
+            </div>
+          </div>
+
           <div className="product-divider" />
 
-          {/* Variant Selector — hidden if single "Default Title" variant */}
+          {/* Stock Counter */}
+          <div className="product-stock-info">
+            <span className="product-stock-dot" />
+            <span>Only <strong>23 left</strong> in stock — order soon</span>
+          </div>
+
+          {/* Variant Selector */}
           {!(product.options.length === 1 && product.options[0].values.length === 1 && product.options[0].values[0] === 'Default Title') && (
             <VariantSelector
               handle={product.handle}
@@ -205,41 +256,52 @@ export default function Product() {
               disabled={!selectedVariant?.availableForSale || !selectedVariant?.id}
             >
               {selectedVariant?.availableForSale
-                ? '🛒 Add to Cart'
+                ? '🛒 Add to Cart — Free Shipping'
                 : 'Out of Stock'}
             </button>
           </Form>
+
+          {/* Delivery Estimate */}
+          <div className="product-delivery">
+            <span className="product-delivery-icon">🚚</span>
+            <div>
+              <strong>Estimated Delivery</strong>
+              <span>{deliveryDate}</span>
+            </div>
+          </div>
 
           {/* Trust Badges */}
           <div className="product-trust-badges">
             <div className="product-trust-badge">
               <span className="product-trust-badge-icon">🔒</span>
-              <span className="product-trust-badge-text">Secure Payment</span>
+              <span className="product-trust-badge-text">Secure<br/>Payment</span>
             </div>
             <div className="product-trust-badge">
               <span className="product-trust-badge-icon">↩️</span>
-              <span className="product-trust-badge-text">30-Day Returns</span>
+              <span className="product-trust-badge-text">30-Day<br/>Returns</span>
             </div>
             <div className="product-trust-badge">
-              <span className="product-trust-badge-icon">😊</span>
-              <span className="product-trust-badge-text">Happy Dad Guaranteed</span>
+              <span className="product-trust-badge-icon">🛡️</span>
+              <span className="product-trust-badge-text">Satisfaction<br/>Guaranteed</span>
             </div>
           </div>
 
-          {/* Feature Checklist */}
-          <ul className="product-features-list">
-            <li>Over 200 carefully selected guided questions</li>
-            <li>Premium high-quality hardcover</li>
-            <li>Ideal format for comfortable writing</li>
-            <li>Perfect gift for Father's Day</li>
-          </ul>
+          {/* Payment Methods */}
+          <div className="product-payments">
+            <span className="product-payments-label">Accepted Payments</span>
+            <div className="product-payments-icons">
+              {['Visa', 'MC', 'Amex', 'PayPal', 'Apple Pay'].map((p) => (
+                <span key={p} className="product-payment-icon">{p}</span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* ── Tabs ── */}
+      {/* Tabs */}
       <div className="product-tabs">
         <div className="product-tabs-header">
-          {['description', 'details', 'reviews'].map((tab) => (
+          {['description', 'details', 'reviews', 'faq'].map((tab) => (
             <button
               key={tab}
               type="button"
@@ -247,16 +309,17 @@ export default function Product() {
               onClick={() => setActiveTab(tab)}
             >
               {tab === 'description'
-                ? 'Description'
+                ? '📋 Description'
                 : tab === 'details'
-                ? 'Product Details'
-                : `Customer Reviews (${staticReviews.length * 474})`}
+                ? '📐 Details'
+                : tab === 'reviews'
+                ? `⭐ Reviews (${staticReviews.length * 474})`
+                : '❓ FAQ'}
             </button>
           ))}
         </div>
 
         <div className="product-tab-content">
-          {/* Description Tab */}
           {activeTab === 'description' && (
             <div className="product-description">
               {product.descriptionHtml ? (
@@ -267,39 +330,21 @@ export default function Product() {
             </div>
           )}
 
-          {/* Details Tab */}
           {activeTab === 'details' && (
             <div className="product-description">
               <ul className="product-details-list">
-                <li>
-                  <strong>Format</strong>
-                  <span>Hardcover</span>
-                </li>
-                <li>
-                  <strong>Pages</strong>
-                  <span>200+ pages of guided questions</span>
-                </li>
-                <li>
-                  <strong>Dimensions</strong>
-                  <span>8 × 5.5 in</span>
-                </li>
-                <li>
-                  <strong>Language</strong>
-                  <span>English</span>
-                </li>
-                <li>
-                  <strong>Packaging</strong>
-                  <span>Careful gift packaging included</span>
-                </li>
-                <li>
-                  <strong>Guarantee</strong>
-                  <span>30-day satisfaction guarantee</span>
-                </li>
+                <li><strong>Format</strong><span>Premium Hardcover</span></li>
+                <li><strong>Pages</strong><span>200+ pages of guided questions</span></li>
+                <li><strong>Paper</strong><span>120gsm acid-free archival paper</span></li>
+                <li><strong>Dimensions</strong><span>8 &times; 5.5 inches</span></li>
+                <li><strong>Language</strong><span>English</span></li>
+                <li><strong>Cover</strong><span>Gold foil details on navy hardcover</span></li>
+                <li><strong>Packaging</strong><span>Premium gift box included</span></li>
+                <li><strong>Guarantee</strong><span>30-day money-back guarantee</span></li>
               </ul>
             </div>
           )}
 
-          {/* Reviews Tab */}
           {activeTab === 'reviews' && (
             <div>
               <div className="reviews-summary">
@@ -332,16 +377,95 @@ export default function Product() {
                     <div className="review-meta">
                       {r.name} — {r.location}
                     </div>
-                    <div className="review-verified">✓ Verified Purchase · {r.date}</div>
+                    <div className="review-verified">✓ Verified Purchase &middot; {r.date}</div>
                   </div>
                 ))}
               </div>
             </div>
           )}
+
+          {activeTab === 'faq' && (
+            <div className="product-faq-list">
+              {productFaqs.map((faq, i) => (
+                <ProductFAQItem key={i} question={faq.q} answer={faq.a} />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Comparison Table */}
+      <div className="product-comparison-section">
+        <h2 className="section-title">Why DearBook Stands Out</h2>
+        <div className="section-divider" />
+        <div className="comparison-table-wrap">
+          <table className="comparison-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th className="comparison-us">📖 DearBook</th>
+                <th>Generic Journals</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>200+ guided questions</td><td className="comparison-us"><span className="comparison-yes">✓</span></td><td><span className="comparison-no">✗</span></td></tr>
+              <tr><td>Premium hardcover</td><td className="comparison-us"><span className="comparison-yes">✓</span></td><td><span className="comparison-no">✗</span></td></tr>
+              <tr><td>Acid-free archival paper</td><td className="comparison-us"><span className="comparison-yes">✓</span></td><td><span className="comparison-no">✗</span></td></tr>
+              <tr><td>Gift-ready packaging</td><td className="comparison-us"><span className="comparison-yes">✓</span></td><td><span className="comparison-no">✗</span></td></tr>
+              <tr><td>30-day guarantee</td><td className="comparison-us"><span className="comparison-yes">✓</span></td><td><span className="comparison-no">✗</span></td></tr>
+              <tr><td>Free shipping</td><td className="comparison-us"><span className="comparison-yes">✓</span></td><td><span className="comparison-no">✗</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Cross-sell */}
+      <div className="product-upsell-section">
+        <h2 className="section-title">Complete the Gift</h2>
+        <div className="section-divider" />
+        <p className="section-subtitle">Customers who bought this also loved</p>
+        <div className="upsell-cards">
+          <div className="upsell-card">
+            <div className="upsell-card-badge">Bundle & Save</div>
+            <h3>2-Pack Family Bundle</h3>
+            <p>Get one for Dad and one for Grandpa. Save 15% on your second journal.</p>
+            <Link to="/collections/all" className="btn-secondary">View Bundle →</Link>
+          </div>
+          <div className="upsell-card">
+            <div className="upsell-card-badge">Popular</div>
+            <h3>Gift Wrapping</h3>
+            <p>Premium gift wrapping with a personalized handwritten note card.</p>
+            <Link to="/collections/all" className="btn-secondary">Add Gift Wrap →</Link>
+          </div>
         </div>
       </div>
     </div>
   );
+}
+
+function ProductFAQItem({question, answer}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`faq-item${open ? ' faq-item-open' : ''}`}>
+      <button className="faq-question" onClick={() => setOpen(!open)} aria-expanded={open}>
+        {question}
+        <span className={`faq-chevron${open ? ' open' : ''}`}>▼</span>
+      </button>
+      <div className={`faq-answer${open ? ' open' : ''}`}>
+        <p>{answer}</p>
+      </div>
+    </div>
+  );
+}
+
+function getEstimatedDelivery() {
+  const now = new Date();
+  const min = new Date(now);
+  min.setDate(min.getDate() + 5);
+  const max = new Date(now);
+  max.setDate(max.getDate() + 8);
+  const fmt = (d) => d.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+  return `${fmt(min)} – ${fmt(max)}`;
 }
 
 function DefaultDescription() {
@@ -366,11 +490,11 @@ function DefaultDescription() {
         question, memory by memory. Each page is a window into his life
         — and a treasure your family will cherish forever.
       </p>
-      <h3>A Quality Object</h3>
+      <h3>Built to Last</h3>
       <p>
-        The premium hardcover and thick high-quality paper make this
+        The premium hardcover and thick, acid-free archival paper make this
         journal an object built to last for decades. Not just a notebook
-        — a true family heirloom.
+        — a true family heirloom that will be passed down through generations.
       </p>
     </>
   );
