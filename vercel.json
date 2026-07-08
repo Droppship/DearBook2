@@ -1,6 +1,5 @@
 {
-  "buildCommand": "npx vite build",
+  "buildCommand": "node build-vercel.mjs",
   "installCommand": "npm ci --legacy-peer-deps",
-  "outputDirectory": "dist/client",
   "framework": null
 }
