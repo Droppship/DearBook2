@@ -12,11 +12,15 @@ import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
 export default {
   async fetch(request, env, executionContext) {
     try {
-      const waitUntil = executionContext.waitUntil.bind(executionContext);
-      const [cache, session] = await Promise.all([
-        caches.open('hydrogen'),
-        AppSession.init(request, [env.SESSION_SECRET]),
-      ]);
+      let waitUntil = (p) => p;
+      if (executionContext?.waitUntil) {
+        try { waitUntil = executionContext.waitUntil.bind(executionContext); } catch {}
+      }
+      let cache;
+      try {
+        cache = typeof caches !== 'undefined' ? await caches.open('hydrogen') : undefined;
+      } catch { cache = undefined; }
+      const session = await AppSession.init(request, [env.SESSION_SECRET]);
 
       const {storefront} = createStorefrontClient({
         cache,
